@@ -28,5 +28,5 @@ The goal is to create an online card game for multiple players. It can be played
 - [ ] score board
 
 ## Additional Materials
-•	Firebase documentation
-•	“Tempel des Schreckens” game and instructions
+- Firebase documentation
+- “Tempel des Schreckens” game and instructions
