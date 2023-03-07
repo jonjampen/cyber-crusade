@@ -1,5 +1,5 @@
 <script>
-    import {player } from "./signInAnonymously";
+    import "./signInAnonymously";
 </script>
 <h1>The Cyber Crusade</h1>
 
