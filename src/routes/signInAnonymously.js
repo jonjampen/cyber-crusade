@@ -4,10 +4,12 @@ import {
      getAuth, onAuthStateChanged,
      signInAnonymously
 } from 'firebase/auth';
+import { randomName } from "./randomName";
 
 const auth = getAuth(app);
 const db = getFirestore();
 const playersColl = collection(db, 'players');
+export const userData = {};
 
 onAuthStateChanged(auth, async (user) => {
     // if logged in
@@ -18,13 +20,18 @@ onAuthStateChanged(auth, async (user) => {
             uidInDB = snapshot.docs.length;
         });
 
+        // create display name
+        let displayName = randomName();
+
         // if user not yet in db, create user
         if (uidInDB == 0) {
             addDoc(playersColl, {
                 uid: auth.currentUser.uid,
-                name: "fritz"
+                name: displayName
             });
         }
+        userData.id = user.uid;
+        userData.displayName = displayName;
     }
 })
 
