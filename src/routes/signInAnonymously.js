@@ -1,32 +1,43 @@
 import { app } from "./initializeFirebase";
-import { getFirestore, collection, addDoc } from "firebase/firestore";
-
+import { getFirestore, collection, addDoc, getDocs, query, where } from "firebase/firestore";
 import {
      getAuth, onAuthStateChanged,
      signInAnonymously
 } from 'firebase/auth';
-export let userID;
 
 const auth = getAuth(app);
+export let player = auth.currentUser
 const db = getFirestore();
-const playersRef = collection(db, 'players');
+const playersColl = collection(db, 'players');
 
-onAuthStateChanged(auth, (user) => {
+let isUser = null;
+onAuthStateChanged(auth, async (user) => {
     if (user) {
-        userID = user.uid;
-        addDoc(playersRef, {
-            uid: userID,
-            name: "david"
-        })
+        // get users from db that have the same uid
+        await getDocs(query(playersColl, where("uid", "==", user.uid))).then((snapshot) => {
+            isUser = snapshot.docs.length;
+        });
+
+        console.log("outside" + isUser);
+        // check user exists in db
+        if (isUser == 0) {
+            addDoc(playersColl, {
+                uid: auth.currentUser.uid,
+                name: "fritz"
+            });
+        }
+        // getDocs(query(playersColl, where("uid", "==", 37)))
+        //     .then((snapshot) => {
+        //         console.log(snapshot.docs[0])
+        //     })
+
     }
 })
 
-// sign in
 signInAnonymously(auth)
+// sign in
     .then(() => {
-        console.log(userID);
-        // Signed in...
-        console.log("Logged in")
+        console.log("Logged in");
     })
     .catch((error) => {
         const errorCode = error.code;
