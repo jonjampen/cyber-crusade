@@ -1,5 +1,5 @@
 <script>
-    import { signUpUser } from "./singup"
+    import { signUpUser } from "./login"
     
     let email, password;
     
