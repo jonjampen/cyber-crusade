@@ -6,25 +6,17 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 const playersColl = collection(db, "players")
 
-auth.onAuthStateChanged(user => {
-    if (user) {
-        let data = {
-            dk: "asdfjalsdjfadklfjöalsdjf",
-            name: "John",
-            country: "USA"
-        }
-        addDoc(playersColl, data);          
-    }
-    else {
-        console.log("no user")
-    }
-  });
-
-
 export function signUpUser(email, password) {	
 
     createUserWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
+        let data = {
+            uid: userCredential.user.uid,
+            name: "Hello",
+            country: "USA"
+        }
+        addDoc(playersColl, data);
+
         console.log("Logged in")
         const user = userCredential.user;
     })
