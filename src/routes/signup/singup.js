@@ -4,16 +4,15 @@ import { getFirestore, addDoc, collection } from "firebase/firestore";
 
 const auth = getAuth(app);
 const db = getFirestore(app);
-const playersColl = collection(db, "players")
+const playersColl = collection(db, "users")
 
-export function signUpUser(email, password) {	
+export function signUpUser(name, email, password) {	
 
     createUserWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
         let data = {
             uid: userCredential.user.uid,
-            name: "Hello",
-            country: "USA"
+            name: name,
         }
         addDoc(playersColl, data);
 
