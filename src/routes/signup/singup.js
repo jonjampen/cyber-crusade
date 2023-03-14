@@ -6,8 +6,7 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 const playersColl = collection(db, "users")
 
-export function signUpUser(name, email, password) {	
-
+export function signUpUser(name, email, password) {
     createUserWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
         let data = {
