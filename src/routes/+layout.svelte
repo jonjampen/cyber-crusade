@@ -21,4 +21,28 @@ import { page } from "$app/stores";
 // })
 
 </script>
+<nav>
+    <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/game">Game</a></li>
+        <li><a href="/login">Login</a></li>
+        <li><a href="/signup">Sign up</a></li>
+    </ul>
+</nav>
 <slot></slot>
+
+<style>
+    nav ul, a {
+        list-style-type: none;
+        text-decoration: none;
+        color: orange;
+        height: 32px;
+    }
+    nav ul {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: end;
+        gap: 32px;
+    }
+</style>
