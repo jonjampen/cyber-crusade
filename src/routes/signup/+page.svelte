@@ -1,20 +1,8 @@
 <script>
     import { signUpUser } from "./singup"
-    import { goto } from '$app/navigation';
     let email, password, name;
     
-    import { app } from "../initializeFirebase";
-    import { getAuth, onAuthStateChanged } from "firebase/auth"
-    const auth = getAuth(app);
 
-    onAuthStateChanged(auth, (user) => {
-        if (user) {
-            console.log("hello2")
-            goto('/')
-        } else {
-
-        }
-    });
 
 </script>
     <h1>Sign Up</h1>
