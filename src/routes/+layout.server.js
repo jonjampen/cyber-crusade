@@ -2,7 +2,7 @@ import { redirect } from '@sveltejs/kit';
 
 
 export async function load({ url }) {
-    let user = true
+    let user = checkIfLoggedIn();
 
     if (user) {
         // authorized but on login
@@ -24,4 +24,9 @@ export async function load({ url }) {
             return {}
         }
     }
+}
+
+
+function checkIfLoggedIn() {
+    return false
 }
