@@ -1,15 +1,26 @@
 import { redirect } from '@sveltejs/kit';
 export async function load({ url }) {
 
-    let user = false
+    let user = true
 
-    if (!user && !url.pathname.includes('/login')) {
-        throw redirect(302, '/login');
-
-    } else if (user && url.pathname.includes('/login')){
-        throw redirect(302, '/');
-    } else {
-      return {}
+    if (user) {
+        // authorized but on login
+        if (url.pathname.includes('/login') || url.pathname.includes('/signup')) {
+            throw redirect(302, '/');
+        }
+        // authorized and OK
+        else {
+            return {}
+        }
     }
-
+    else {
+        // unauthorized
+        if (!url.pathname.includes('/login') && !url.pathname.includes('/signup')) {
+            throw redirect(302, '/login');
+        }
+        // on login
+        else {
+            return {}
+        }
+    }
 }
