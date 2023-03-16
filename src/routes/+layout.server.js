@@ -1,32 +1,26 @@
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { app } from "./initializeFirebase";
 import { redirect } from '@sveltejs/kit';
 
 
+
 export async function load({ url }) {
-    let user = checkIfLoggedIn();
-
-    if (user) {
-        // authorized but on login
-        if (url.pathname.includes('/login') || url.pathname.includes('/signup')) {
-            throw redirect(302, '/');
+    const auth = getAuth(app);
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            //? Why do I never get here?
+            console.log("Hello, you are logged in")
         }
-        // authorized and OK
         else {
-            return {}
+            console.log("Not logged in!")
+            console.log(url.pathname)
+            if (!url.pathname.includes("login") && !url.pathname.includes("signup")) {
+                console.log("Not on login/signup. To be redirected")
+                //? How to redirect?
+            }
+            else {
+                return
+            }
         }
-    }
-    else {
-        // unauthorized
-        if (!url.pathname.includes('/login') && !url.pathname.includes('/signup')) {
-            throw redirect(302, '/login');
-        }
-        // on login
-        else {
-            return {}
-        }
-    }
-}
-
-
-function checkIfLoggedIn() {
-    return false
+    })
 }
