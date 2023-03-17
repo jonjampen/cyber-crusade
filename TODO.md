@@ -6,7 +6,7 @@ The goal is to create an online card game for multiple players. It can be played
 
 ## Project Plan
 ### V1 User Sign Up:
-- [ ] learn firebase basics
+- [x] learn firebase basics
 - [ ] signing up users (email)
     - [x] firebase auth
     - [x] login / sign up / logout
