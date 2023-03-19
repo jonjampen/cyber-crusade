@@ -1,43 +1,31 @@
 <script>
+import { initializeApp } from "firebase/app";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { goto } from "$app/navigation";
-import { app } from "./initializeFirebase";
 import { page } from "$app/stores";
 import { onMount } from "svelte";
+import authStore from "../stores/authStore"
 
-const auth = getAuth();
+onMount(() => {
+    const firebaseConfig = {
+        apiKey: "AIzaSyBgGsxHQnm4A_QanvUuibQIuWvg0vnKZOs",
+        authDomain: "the-cyber-crusade.firebaseapp.com",
+        projectId: "the-cyber-crusade",
+        storageBucket: "the-cyber-crusade.appspot.com",
+        messagingSenderId: "249426335271",
+        appId: "1:249426335271:web:907f9c9d16ace85dfe6002"
+    };
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
 
-let userData = {"uid": "", "email": ""};
+    onAuthStateChanged(auth, (user) => {
+        authStore.set({
+            isLoggedIn: user !== null,
+            user,
+        })
+    })
+})
 
-// onMount(() => {
-//     onAuthStateChanged(auth, (user) => {
-//         if (user) {
-//             console.log("User signed in")
-
-//             userData = {
-//                 "uid": user.uid,
-//                 "email": user.email,
-//             }
-//             console.log(user.email)
-//             // ...
-//         } else {
-//             // User is signed out
-//             console.log("User is not signed in")
-//             console.log("page:" + $page.url.pathname)
-//             if (!$page.url.pathname.includes("login") && !$page.url.pathname.includes("signup")) {
-//                 console.log("Redirect")
-//                 goto("/login")
-//             }
-//         }
-//     });
-// })
-import authStore from "./authStore";
-
-authStore.subscribe(async ({ isLoggedIn }) => {
-  if (!isLoggedIn) {
-    await goto("/login");
-  }
-});
 </script>
 <nav>
     <ul>
@@ -49,8 +37,8 @@ authStore.subscribe(async ({ isLoggedIn }) => {
     </ul>
 </nav>
 
-    <h1>{userData.email}</h1>
-    <h1>authStore: {get(authStore)}</h1>
+    <h1></h1>
+    <h1></h1>
 
 <!-- wait for user -->
 <slot></slot>
