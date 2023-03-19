@@ -9,29 +9,35 @@ const auth = getAuth();
 
 let userData = {"uid": "", "email": ""};
 
-onMount(() => {
-    onAuthStateChanged(auth, (user) => {
-        if (user) {
-            console.log("User signed in")
+// onMount(() => {
+//     onAuthStateChanged(auth, (user) => {
+//         if (user) {
+//             console.log("User signed in")
 
-            userData = {
-                "uid": user.uid,
-                "email": user.email,
-            }
-            console.log(user.email)
-            // ...
-        } else {
-            // User is signed out
-            console.log("User is not signed in")
-            console.log("page:" + $page.url.pathname)
-            if (!$page.url.pathname.includes("login") && !$page.url.pathname.includes("signup")) {
-                console.log("Redirect")
-                goto("/login")
-            }
-        }
-    });
-})
+//             userData = {
+//                 "uid": user.uid,
+//                 "email": user.email,
+//             }
+//             console.log(user.email)
+//             // ...
+//         } else {
+//             // User is signed out
+//             console.log("User is not signed in")
+//             console.log("page:" + $page.url.pathname)
+//             if (!$page.url.pathname.includes("login") && !$page.url.pathname.includes("signup")) {
+//                 console.log("Redirect")
+//                 goto("/login")
+//             }
+//         }
+//     });
+// })
+import authStore from "./authStore";
 
+authStore.subscribe(async ({ isLoggedIn }) => {
+  if (!isLoggedIn) {
+    await goto("/login");
+  }
+});
 </script>
 <nav>
     <ul>
@@ -39,10 +45,12 @@ onMount(() => {
         <li><a href="/game">Game</a></li>
         <li><a href="/login">Login</a></li>
         <li><a href="/signup">Sign up</a></li>
+        <li><a href="/signup">Sign up</a></li>
     </ul>
 </nav>
 
     <h1>{userData.email}</h1>
+    <h1>authStore: {get(authStore)}</h1>
 
 <!-- wait for user -->
 <slot></slot>
