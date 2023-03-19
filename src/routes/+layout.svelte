@@ -23,8 +23,20 @@ onMount(() => {
             isLoggedIn: user !== null,
             user,
         })
-    })
-})
+    });
+});
+let loginState = false;
+authStore.subscribe(async ({ isLoggedIn, user }) => {
+    if (!isLoggedIn) {
+        console.log("not logged in");
+        loginState = false;
+    }
+    else {
+        console.log("is logged in");
+        console.log(user);
+        loginState = true;
+    }
+});
 
 </script>
 <nav>
@@ -37,11 +49,11 @@ onMount(() => {
     </ul>
 </nav>
 
-    <h1></h1>
-    <h1></h1>
-
-<!-- wait for user -->
-<slot></slot>
+{#if !loginState && $page.url.pathname !== "/login" && $page.url.pathname !== "/signup" && $page.url.pathname !== "/logout"}
+    <a href="/login"><button>Go to login</button></a>
+{:else}
+    <slot></slot>
+{/if}
 
 <style>
     nav ul, a {
