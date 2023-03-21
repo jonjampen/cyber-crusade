@@ -7,12 +7,12 @@ The goal is to create an online card game for multiple players. It can be played
 ## Project Plan
 ### V1 User Sign Up:
 - [x] learn firebase basics
-- [ ] signing up users (email)
+- [x] signing up users (email)
     - [x] firebase auth
     - [x] login / sign up / logout
     - [x] create document with user info
     - [x] in layout check if user is logged in or not (and redirect if necessary)
-- [ ] Waiting Room
+- [x] Waiting Room
 ### V2 Game Preparation:
 - [ ] option to start game -> creating games collection in db
 - [ ] getting updates from db
