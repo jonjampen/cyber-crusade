@@ -2,12 +2,12 @@
     import authStore from "../../stores/authStore";
     import { app } from "../initializeFirebase";
     import { getAuth } from "firebase/auth";
-    import { getFirestore, addDoc, collection, onSnapshot, getDocs, query, where } from "firebase/firestore";
+    import { getFirestore, addDoc, collection, onSnapshot, getDocs, where } from "firebase/firestore";
     
     let playState = null;
     const db = getFirestore(app);
     const playersColl = collection(db, "players")
-
+    const gamesColl = collection(db, "games")
     // check if already in players collection and set playState
     
     function joinGame() {
@@ -28,6 +28,19 @@
                 playState = "joined";
             }
         });
+    }
+
+    function startGame() {
+        // create game document
+        let gameData = {
+            gameState: "created",
+        }
+        addDoc(gamesColl, gameData)
+        // linking players to game
+
+        // distribute roles
+
+        playState = "playing";
     }
 
     //subscribe to players collection to display all players
@@ -51,5 +64,7 @@
     {#each allPlayers as player}
         <p>{player.name}</p>
     {/each}
-    <button>Start Game</button>
+    <button on:click={startGame}>Start Game</button>
+{:else if playState == "playing"}
+    <p>Playing</p>
 {/if}
