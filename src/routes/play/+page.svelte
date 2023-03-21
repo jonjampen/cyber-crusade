@@ -28,7 +28,8 @@
 
     //subscribe to players collection to display all players
     let allPlayers = [];
-    onSnapshot(playersColl, async (snapshot) => {
+    $: onSnapshot(playersColl, async (snapshot) => {
+        allPlayers = []; // clear player list
         snapshot.docs.forEach((doc) => {
             allPlayers.push({ ...doc.data()})
         })
@@ -44,6 +45,7 @@
     <p>You joined the game</p>
     <h4>Players:</h4>
     {#each allPlayers as player}
-        <p>{player.uid}</p>
+        <p>{player.name}</p>
     {/each}
+    <button>Start Game</button>
 {/if}
