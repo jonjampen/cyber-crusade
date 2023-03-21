@@ -12,10 +12,8 @@
     
     function joinGame(event, gameId=false) {
         if (!gameId) {
-            console.log("hello")
             gameId = parseInt(document.getElementById("gameIdInput").value);
         }
-        console.log(gameId)
         authStore.subscribe(async ({ user, name }) => {
             if (user) {
                 let alreadyPlayer;
