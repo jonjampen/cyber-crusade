@@ -9,19 +9,22 @@
     const playersColl = collection(db, "players")
 
     // check if already in players collection and set playState
-
+    
     function joinGame() {
         authStore.subscribe(async ({ user, name }) => {
+            let alreadyPlayer = null;
             if (user) {
-                if (!allPlayers.includes(name)) {   
+                alreadyPlayer = await getDocs(playersColl, where("uid", "==", user.uid))
+
+                if (!alreadyPlayer) {   
                     console.log(name) 
                     let data = {
                         uid: user.uid,
                         name: name,
                     }
                     addDoc(playersColl, data);
-                    playState = "joined";
-                    }
+                }
+                playState = "joined";
             }
         });
     }
