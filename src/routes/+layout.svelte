@@ -1,6 +1,7 @@
 <script>
 import { initializeApp } from "firebase/app";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { getFirestore, addDoc, collection, onSnapshot, getDocs, query, where } from "firebase/firestore";
 import { goto } from "$app/navigation";
 import { page } from "$app/stores";
 import { onMount } from "svelte";
@@ -17,11 +18,19 @@ onMount(() => {
     };
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
+    const db = getFirestore(app);
+    const usersColl = collection(db, "users");
 
-    onAuthStateChanged(auth, (user) => {
+    onAuthStateChanged(auth, async (user) => {
+        let theName;
+        let users = await getDocs(usersColl, where("uid", "==", user.uid))
+        users.forEach(doc => {
+            theName = doc.data().name;
+        });
         authStore.set({
             isLoggedIn: user !== null,
             user,
+            name: theName,
         })
     });
 });
@@ -33,7 +42,6 @@ authStore.subscribe(async ({ isLoggedIn, user }) => {
     }
     else {
         console.log("is logged in");
-        console.log(user);
         loginState = true;
     }
 });

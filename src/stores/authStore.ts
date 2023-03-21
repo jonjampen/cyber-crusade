@@ -3,6 +3,7 @@ import { writable } from 'svelte/store';
 const authStore = writable<{
     isLoggedIn: boolean,
     user?: object,
+    name?: string,
 }>({
     isLoggedIn: false,
 })
