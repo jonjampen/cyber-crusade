@@ -2,7 +2,7 @@
     import authStore from "../../stores/authStore";
     import { app } from "../initializeFirebase";
     import { getAuth } from "firebase/auth";
-    import { getFirestore, addDoc, collection, onSnapshot, getDocs, where, query, updateDoc, doc } from "firebase/firestore";
+    import { getFirestore, addDoc, collection, onSnapshot, getDocs, where, query, updateDoc, doc, setDoc } from "firebase/firestore";
     
     let playState = null;
     const db = getFirestore(app);
@@ -10,7 +10,12 @@
     const gamesColl = collection(db, "games")
     // check if already in players collection and set playState
     
-    function joinGame() {
+    function joinGame(event, gameId=false) {
+        if (!gameId) {
+            console.log("hello")
+            gameId = parseInt(document.getElementById("gameIdInput").value);
+        }
+        console.log(gameId)
         authStore.subscribe(async ({ user, name }) => {
             if (user) {
                 let alreadyPlayer;
@@ -23,6 +28,7 @@
                     let data = {
                         uid: user.uid,
                         name: name,
+                        gameId: gameId,
                     }
                     await addDoc(playersColl, data);
                 }
@@ -32,11 +38,6 @@
     }
 
     async function startGame() {
-        // create game document
-        let gameData = {
-            gameState: "created",
-        }
-        addDoc(gamesColl, gameData)
         // linking players to game (TK)
 
         // distribute roles
@@ -72,12 +73,33 @@
             })
         }
     })
+
+    // let game, gameId = "Gi5ShhYSfznHv8QRpuYy";
+    // $: onSnapshot(doc(db, "games", gameId), async (snapshot) => {
+    //     if (playState) {
+    //         game = snapshot;
+    //     }
+    // })
+
+    function createGame() {
+        // create game document
+        let gameData = {
+            gameState: "created",
+        }
+        let gameId = "1";
+        setDoc(doc(db, "games", gameId), gameData)
+
+        joinGame(null, gameId)
+    }
 </script>
 
 
 {#if !playState}
     <h1>Play!</h1>
+    <input type="text" name="gameId" id="gameIdInput">
     <button on:click={joinGame}>Join Game</button>
+    <br>
+    <button on:click={createGame}>Create Game</button>
 {:else if playState == "joined"}
     <h2>Waiting Room</h2>
     <p>You joined the game</p>
