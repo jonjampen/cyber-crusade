@@ -42,9 +42,10 @@
         // distribute roles
         let roles = ["Entdecker", "Entdecker", "Wächter"];
         allPlayers.forEach(player => {
-            let index = roles[Math.floor(Math.random()*roles.length)];
+            let index = Math.floor(Math.random()*roles.length);
             let playerRole = roles[index];
             roles.splice(index, 1);
+            // console.log(Math.floor(Math.random()*roles.length))
             console.log(playerRole)
         })
 

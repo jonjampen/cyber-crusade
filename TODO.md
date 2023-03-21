@@ -14,7 +14,7 @@ The goal is to create an online card game for multiple players. It can be played
     - [x] in layout check if user is logged in or not (and redirect if necessary)
 - [x] Waiting Room
 ### V2 Game Preparation:
-- [ ] option to start game -> creating games collection in db
+- [x] option to start game -> creating games collection in db
 - [ ] getting updates from db
 - [ ] distribution of roles -> creating players collection in db
 - [ ] distribution of cards -> adding them to db
