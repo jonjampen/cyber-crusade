@@ -8,20 +8,25 @@
     const db = getFirestore(app);
     const playersColl = collection(db, "players")
     const gamesColl = collection(db, "games")
-    // check if already in players collection and set playState
+    // check if already in a game and set playState
     
     function joinGame(event, gameId=false) {
+        // set id to input id (if  not set from createGame)
         if (!gameId) {
             gameId = parseInt(document.getElementById("gameIdInput").value);
         }
+        
+        //get user data
         authStore.subscribe(async ({ user, name }) => {
             if (user) {
+                // check if user is already a player
                 let alreadyPlayer;
-                
                 let playersWithId = await getDocs(query(playersColl, where("uid", "==", user.uid)))
                 playersWithId.forEach(doc => {
                     alreadyPlayer = doc.data().uid
                 })
+
+                // if not, add to players
                 if (!alreadyPlayer) {   
                     let data = {
                         uid: user.uid,
@@ -36,32 +41,23 @@
     }
 
     async function startGame() {
-        // linking players to game (TK)
-
         // distribute roles
         let roles = ["Entdecker", "Entdecker", "Wächter"];
         allPlayers.forEach(async player => {
-            // distribute roles
+            // distribute random roles
             let index = Math.floor(Math.random()*roles.length);
             let playerRole = roles[index];
-            roles.splice(index, 1);
-            console.log(playerRole)
+            roles.splice(index, 1); // remove from list
 
             // add role to db
             await updateDoc(doc(db, "players", player.id), {
                 role: playerRole,
             });
-
-
-            console.log(player.uid)
-
-
-        })
-
+        });
         playState = "playing";
     }
 
-    //subscribe to players collection to display all players
+    //subscribe to players collection to get all players
     let allPlayers = [];
     $: onSnapshot(playersColl, async (snapshot) => {
         if (playState != "playing") {
@@ -72,7 +68,7 @@
         }
     })
 
-    // let game, gameId = "Gi5ShhYSfznHv8QRpuYy";
+    // let game;
     // $: onSnapshot(doc(db, "games", gameId), async (snapshot) => {
     //     if (playState) {
     //         game = snapshot;
@@ -93,12 +89,15 @@
 
 
 {#if !playState}
+
     <h1>Play!</h1>
     <input type="text" name="gameId" id="gameIdInput">
     <button on:click={joinGame}>Join Game</button>
     <br>
     <button on:click={createGame}>Create Game</button>
+
 {:else if playState == "joined"}
+
     <h2>Waiting Room</h2>
     <p>You joined the game</p>
     <h4>Players:</h4>
@@ -106,6 +105,9 @@
         <p>{player.name}</p>
     {/each}
     <button on:click={startGame}>Start Game</button>
+
 {:else if playState == "playing"}
+
     <p>Playing</p>
+    
 {/if}
