@@ -2,7 +2,7 @@
     import authStore from "../../stores/authStore";
     import { app } from "../initializeFirebase";
     import { getAuth } from "firebase/auth";
-    import { getFirestore, addDoc, collection, onSnapshot, getDocs, where } from "firebase/firestore";
+    import { getFirestore, addDoc, collection, onSnapshot, getDocs, where, query } from "firebase/firestore";
     
     let playState = null;
     const db = getFirestore(app);
@@ -14,7 +14,8 @@
         authStore.subscribe(async ({ user, name }) => {
             if (user) {
                 let alreadyPlayer;
-                let playersWithId = await getDocs(playersColl, where("uid", "==", user.uid))
+                
+                let playersWithId = await getDocs(query(playersColl, where("uid", "==", user.uid)))
                 playersWithId.forEach(doc => {
                     alreadyPlayer = doc.data().uid
                 })
@@ -30,15 +31,22 @@
         });
     }
 
-    function startGame() {
+    async function startGame() {
         // create game document
         let gameData = {
             gameState: "created",
         }
         addDoc(gamesColl, gameData)
-        // linking players to game
+        // linking players to game (TK)
 
         // distribute roles
+        let roles = ["Entdecker", "Entdecker", "Wächter"];
+        allPlayers.forEach(player => {
+            let index = roles[Math.floor(Math.random()*roles.length)];
+            let playerRole = roles[index];
+            roles.splice(index, 1);
+            console.log(playerRole)
+        })
 
         playState = "playing";
     }
@@ -46,10 +54,12 @@
     //subscribe to players collection to display all players
     let allPlayers = [];
     $: onSnapshot(playersColl, async (snapshot) => {
-        allPlayers = []; // clear player list
-        snapshot.docs.forEach((doc) => {
-            allPlayers.push({ ...doc.data()})
-        })
+        if (playState != "playing") {
+            allPlayers = []; // clear player list
+            snapshot.docs.forEach((doc) => {
+                allPlayers.push({ ...doc.data()})
+            })
+        }
     })
 </script>
 

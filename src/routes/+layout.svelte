@@ -23,7 +23,7 @@ onMount(() => {
 
     onAuthStateChanged(auth, async (user) => {
         let theName;
-        let users = await getDocs(usersColl, where("uid", "==", user.uid))
+        let users = await getDocs(query(usersColl, where("uid", "==", user.uid)))
         users.forEach(doc => {
             theName = doc.data().name;
         });
