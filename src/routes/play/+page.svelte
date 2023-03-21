@@ -2,7 +2,7 @@
     import authStore from "../../stores/authStore";
     import { app } from "../initializeFirebase";
     import { getAuth } from "firebase/auth";
-    import { getFirestore, addDoc, collection, onSnapshot, getDocs, where, query } from "firebase/firestore";
+    import { getFirestore, addDoc, collection, onSnapshot, getDocs, where, query, updateDoc, doc } from "firebase/firestore";
     
     let playState = null;
     const db = getFirestore(app);
@@ -24,7 +24,7 @@
                         uid: user.uid,
                         name: name,
                     }
-                    addDoc(playersColl, data);
+                    await addDoc(playersColl, data);
                 }
                 playState = "joined";
             }
@@ -41,12 +41,22 @@
 
         // distribute roles
         let roles = ["Entdecker", "Entdecker", "Wächter"];
-        allPlayers.forEach(player => {
+        allPlayers.forEach(async player => {
+            // distribute roles
             let index = Math.floor(Math.random()*roles.length);
             let playerRole = roles[index];
             roles.splice(index, 1);
-            // console.log(Math.floor(Math.random()*roles.length))
             console.log(playerRole)
+
+            // add role to db
+            await updateDoc(doc(db, "players", player.id), {
+                role: playerRole,
+            });
+
+
+            console.log(player.uid)
+
+
         })
 
         playState = "playing";
@@ -58,7 +68,7 @@
         if (playState != "playing") {
             allPlayers = []; // clear player list
             snapshot.docs.forEach((doc) => {
-                allPlayers.push({ ...doc.data()})
+                allPlayers.push({ ...doc.data(), id: doc.id })
             })
         }
     })
