@@ -12,12 +12,13 @@
     
     function joinGame() {
         authStore.subscribe(async ({ user, name }) => {
-            let alreadyPlayer = null;
             if (user) {
-                alreadyPlayer = await getDocs(playersColl, where("uid", "==", user.uid))
-
+                let alreadyPlayer;
+                let playersWithId = await getDocs(playersColl, where("uid", "==", user.uid))
+                playersWithId.forEach(doc => {
+                    alreadyPlayer = doc.data().uid
+                })
                 if (!alreadyPlayer) {   
-                    console.log(name) 
                     let data = {
                         uid: user.uid,
                         name: name,
