@@ -50,7 +50,7 @@ authStore.subscribe(async ({ isLoggedIn, user }) => {
 <nav>
     <ul>
         <li><a href="/">Home</a></li>
-        <li><a href="/game">Game</a></li>
+        <li><a href="/play">Join / Start game</a></li>
         <li><a href="/login">Login</a></li>
         <li><a href="/signup">Sign up</a></li>
         <li><a href="/signup">Sign up</a></li>
