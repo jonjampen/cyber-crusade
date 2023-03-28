@@ -32,28 +32,6 @@
                         uid: user.uid,
                         name: name,
                         gameId: gameId,
-                        cards: {
-                            card1: {
-                                turned: false,
-                                value: "empty",
-                            },
-                            card2: {
-                                turned: false,
-                                value: "empty",
-                            },
-                            card3: {
-                                turned: false,
-                                value: "empty",
-                            },
-                            card4: {
-                                turned: false,
-                                value: "empty",
-                            },
-                            card5: {
-                                turned: false,
-                                value: "empty",
-                            },
-                        }
                     }
                     await addDoc(playersColl, data);
                 }
@@ -74,6 +52,28 @@
             // add role to db
             await updateDoc(doc(db, "players", player.id), {
                 role: playerRole,
+                cards: {
+                    card1: {
+                        turned: false,
+                        value: "empty",
+                    },
+                    card2: {
+                        turned: false,
+                        value: "empty",
+                    },
+                    card3: {
+                        turned: false,
+                        value: "empty",
+                    },
+                    card4: {
+                        turned: false,
+                        value: "empty",
+                    },
+                    card5: {
+                        turned: false,
+                        value: "empty",
+                    },
+                },
             });
         });
         playState = "playing";
