@@ -32,6 +32,28 @@
                         uid: user.uid,
                         name: name,
                         gameId: gameId,
+                        cards: {
+                            card1: {
+                                turned: false,
+                                value: "empty",
+                            },
+                            card2: {
+                                turned: false,
+                                value: "empty",
+                            },
+                            card3: {
+                                turned: false,
+                                value: "empty",
+                            },
+                            card4: {
+                                turned: false,
+                                value: "empty",
+                            },
+                            card5: {
+                                turned: false,
+                                value: "empty",
+                            },
+                        }
                     }
                     await addDoc(playersColl, data);
                 }
@@ -80,7 +102,7 @@
         let gameData = {
             gameState: "created",
         }
-        let gameId = "1";
+        let gameId = "2";
         setDoc(doc(db, "games", gameId), gameData)
 
         joinGame(null, gameId)
