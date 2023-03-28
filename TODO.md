@@ -25,11 +25,8 @@ The goal is to create an online card game for multiple players. It can be played
 - [ ] redistribute cards for new round
 ### V4 Extensions:
 - [ ] adjustments for more players
-- [ ] option to join a game with ID (several games at the same time)
+- [ ] several games at the same time
 - [ ] write the game instructions
-### V5 Optional:
-- [ ] signup with email & password
-- [ ] score board
 
 ## Additional Materials
 - Firebase documentation
