@@ -2,12 +2,13 @@
     import authStore from "../../stores/authStore";
     import { app } from "../initializeFirebase";
     import { getAuth } from "firebase/auth";
-    import { getFirestore, addDoc, collection, onSnapshot, getDocs, where, query, updateDoc, doc, setDoc } from "firebase/firestore";
+    import { getFirestore, addDoc, collection, onSnapshot, getDocs, where, query, updateDoc, doc, setDoc, getDoc } from "firebase/firestore";
     
     let playState = null;
     const db = getFirestore(app);
     const playersColl = collection(db, "players")
     const gamesColl = collection(db, "games")
+    let gameData, gameRef;
     // check if already in a game and set playState
     
     function joinGame(event, gameId=false) {
@@ -35,6 +36,22 @@
                     }
                     await addDoc(playersColl, data);
                 }
+
+                
+                gameRef = doc(db, "games", "2");
+
+                // set gameState to playing and set playState to playing
+
+                let unsubscribeGame = onSnapshot(gamesColl, async (snapshot) => {
+                    snapshot.docs.forEach((doc) => {
+                        if (doc.id == "2") {
+                            gameData = doc.data();
+                            console.log(gameData)
+                        }
+                    })
+                })
+
+
                 playState = "joined";
             }
         });
@@ -58,14 +75,20 @@
                 cards: playerCards,
             });
         });
+
+
+        await setDoc(gameRef, {
+            gameState: "playing",
+        })
         playState = "playing";
+
+
         unsubscribe();
     }
 
     //subscribe to players collection to get all players
     let allPlayers = [];
-    let unsubscribe;
-    unsubscribe = onSnapshot(playersColl, async (snapshot) => {
+    let unsubscribe = onSnapshot(playersColl, async (snapshot) => {
         if (playState != "playing") {
             allPlayers = []; // clear player list
             snapshot.docs.forEach((doc) => {
