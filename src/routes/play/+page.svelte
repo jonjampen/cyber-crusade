@@ -1,16 +1,29 @@
 <script>
     import authStore from "../../stores/authStore";
     import { app } from "../initializeFirebase";
-    import { getAuth } from "firebase/auth";
-    import { getFirestore, addDoc, collection, onSnapshot, getDocs, where, query, updateDoc, doc, setDoc, getDoc } from "firebase/firestore";
+    import { getFirestore, addDoc, collection, onSnapshot, getDocs, where, query, updateDoc, doc, setDoc } from "firebase/firestore";
     
-    let playState = null;
+    let playState = null, gameData, allPlayers = [];
+    let roles = [];
+    let cards = {"empty": 0, "gold": 0, "fire": 0};
+
     const db = getFirestore(app);
     const playersColl = collection(db, "players")
     const gamesColl = collection(db, "games")
-    let gameData, gameRef;
-    // check if already in a game and set playState
-    
+    let gameRef;
+
+
+    function createGame() {
+        // create game document
+        let gameData = {
+            gameState: "created",
+        }
+        let gameId = "2";
+        setDoc(doc(db, "games", gameId), gameData)
+
+        joinGame(null, gameId)
+    }
+
     function joinGame(event, gameId=false) {
         // set id to input id (if  not set from createGame)
         if (!gameId) {
@@ -22,8 +35,8 @@
             if (user) {
                 // check if user is already a player
                 let alreadyPlayer;
-                let playersWithId = await getDocs(query(playersColl, where("uid", "==", user.uid)))
-                playersWithId.forEach(doc => {
+                let playersWithSameId = await getDocs(query(playersColl, where("uid", "==", user.uid)))
+                playersWithSameId.forEach(doc => {
                     alreadyPlayer = doc.data().uid
                 })
 
@@ -37,13 +50,12 @@
                     await addDoc(playersColl, data);
                 }
 
-                
+                // set game reference
                 gameRef = doc(db, "games", "2");
-
-                // set gameState to playing and set playState to playing
-
+                // subscribe to changes in the games collection
                 let unsubscribeGame = onSnapshot(gamesColl, async (snapshot) => {
                     snapshot.docs.forEach((doc) => {
+                        // safe game data if it is current game
                         if (doc.id == "2") {
                             gameData = doc.data();
                             console.log(gameData)
@@ -51,71 +63,39 @@
                     })
                 })
 
-
                 playState = "joined";
             }
         });
     }
-    let roles = ["Entdecker", "Entdecker", "Wächter"];
-    let cards = {"empty": 8, "gold": 5, "fire": 2,}
-    
+
+    function setByPlayers() {
+        roles.push("Entdecker", "Entdecker", "Wächter");
+        cards["empty"] = 8;
+        cards["gold"] = 5;
+        cards["fire"] = 2;
+    }
+
     async function startGame() {
         // distribute roles
+        setByPlayers();
         allPlayers.forEach(async player => {
-            // distribute random roles
-            let index = Math.floor(Math.random()*roles.length);
-            let playerRole = roles[index];
-            roles.splice(index, 1); // remove from list
+            let playerRole = distributeRoles();
             let playerCards = distributeCards();
-            console.log(playerCards);
             
-            // add role to db
+            // add role & cards to db
             await updateDoc(doc(db, "players", player.id), {
                 role: playerRole,
                 cards: playerCards,
             });
         });
 
-
+        // set gameState in db to playing
         await setDoc(gameRef, {
             gameState: "playing",
         })
+
         playState = "playing";
-
-
-        unsubscribe();
     }
-
-    //subscribe to players collection to get all players
-    let allPlayers = [];
-    let unsubscribe = onSnapshot(playersColl, async (snapshot) => {
-        if (playState != "playing") {
-            allPlayers = []; // clear player list
-            snapshot.docs.forEach((doc) => {
-                allPlayers.push({ ...doc.data(), id: doc.id })
-            })
-        }
-    })
-
-
-    // let game;
-    // $: onSnapshot(doc(db, "games", gameId), async (snapshot) => {
-    //     if (playState) {
-    //         game = snapshot;
-    //     }
-    // })
-
-    function createGame() {
-        // create game document
-        let gameData = {
-            gameState: "created",
-        }
-        let gameId = "2";
-        setDoc(doc(db, "games", gameId), gameData)
-
-        joinGame(null, gameId)
-    }
-
 
     function distributeCards() {
         let playerCards = [], cardIndex;
@@ -131,6 +111,7 @@
                 turned: false,
             });
 
+            // remove if none of type is left
             if (cards[Object.keys(cards)[cardIndex]] == 0) {
                 delete cards[Object.keys(cards)[cardIndex]];
             }
@@ -138,6 +119,33 @@
 
         return playerCards;
     }
+
+    function distributeRoles() {
+        // distribute random roles
+        let index = Math.floor(Math.random()*roles.length);
+        let playerRole = roles[index];
+        roles.splice(index, 1); // remove from list
+        
+        return playerRole;
+    }
+
+    //subscribe to players collection to get all players
+    let unsubscribePlayers = onSnapshot(playersColl, async (snapshot) => {
+        allPlayers = []; // clear player list
+        snapshot.docs.forEach((doc) => {
+            allPlayers.push({ ...doc.data(), id: doc.id })
+        })
+    })
+
+    // change game state if game is started (even by other players)
+    $: if (gameData) {
+        console.log(gameData.gameState)
+        if (gameData.gameState == "playing") {
+            playState = "playing";
+        }
+    }
+    
+
 </script>
 
 <p>{playState}</p>
