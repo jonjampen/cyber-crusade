@@ -43,27 +43,13 @@
     async function startGame() {
         // distribute roles
         let roles = ["Entdecker", "Entdecker", "Wächter"];
-        let cards = {"empty": 8, "gold": 5, "fire": 2,}
         allPlayers.forEach(async player => {
             // distribute random roles
             let index = Math.floor(Math.random()*roles.length);
             let playerRole = roles[index];
             roles.splice(index, 1); // remove from list
 
-            // distribute random cards
-            let cardIndex = Math.floor(Math.random()*Object.keys(cards).length);
-            let playerCards=[];
-            for (let i = playerCards.length; i < 5; i++) {
-                // play
-            }
-            playerCards.push(Object.keys(cards)[cardIndex]);
-
-            cards[cardIndex] -= 1;
-            if (cards[cardIndex] == 0) {
-                cards.splice(cardIndex, 1); // remove from list
-            }
-            console.log("player cards:" + playerCards)
-            console.log(cards)
+            
             // add role to db
             await updateDoc(doc(db, "players", player.id), {
                 role: playerRole,
@@ -125,9 +111,32 @@
 
         joinGame(null, gameId)
     }
+
+
+    function distributeCards() {
+        let cards = {"empty": 8, "gold": 5, "fire": 2,}
+        let playerCards = [], cardIndex;
+        
+        // distribute random cards
+        while (playerCards.length < 5) {
+            cardIndex = Math.floor(Math.random()*Object.keys(cards).length); // random number: index of cards
+            cards[Object.keys(cards)[cardIndex]] -= 1; // remove from array
+            
+            // add to playerCards
+            playerCards.push({
+                value: Object.keys(cards)[cardIndex], // card value (= the key in cards array)
+                turned: false,
+            });
+
+            if (cards[Object.keys(cards)[cardIndex]] == 0) {
+                delete cards[Object.keys(cards)[cardIndex]];
+            }
+        }
+    }
 </script>
 
 <p>{playState}</p>
+<button on:click={distributeCards}>distribute Cards</button>
 {#if !playState}
 
     <h1>Play!</h1>
