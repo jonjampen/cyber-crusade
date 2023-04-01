@@ -43,35 +43,50 @@
     async function startGame() {
         // distribute roles
         let roles = ["Entdecker", "Entdecker", "Wächter"];
+        let cards = {"empty": 8, "gold": 5, "fire": 2,}
         allPlayers.forEach(async player => {
             // distribute random roles
             let index = Math.floor(Math.random()*roles.length);
             let playerRole = roles[index];
             roles.splice(index, 1); // remove from list
 
+            // distribute random cards
+            let cardIndex = Math.floor(Math.random()*Object.keys(cards).length);
+            let playerCards=[];
+            for (let i = playerCards.length; i < 5; i++) {
+                play
+            }
+            playerCards.push(Object.keys(cards)[cardIndex]);
+
+            cards[cardIndex] -= 1;
+            if (cards[cardIndex] == 0) {
+                cards.splice(cardIndex, 1); // remove from list
+            }
+            console.log("player cards:" + playerCards)
+            console.log(cards)
             // add role to db
             await updateDoc(doc(db, "players", player.id), {
                 role: playerRole,
                 cards: {
                     card1: {
                         turned: false,
-                        value: "empty",
+                        value: playerCards[0],
                     },
                     card2: {
                         turned: false,
-                        value: "empty",
+                        value: playerCards[1],
                     },
                     card3: {
                         turned: false,
-                        value: "empty",
+                        value: playerCards[2],
                     },
                     card4: {
                         turned: false,
-                        value: "empty",
+                        value: playerCards[3],
                     },
                     card5: {
                         turned: false,
-                        value: "empty",
+                        value: playerCards[4],
                     },
                 },
             });
