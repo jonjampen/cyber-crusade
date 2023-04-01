@@ -54,7 +54,7 @@
             let cardIndex = Math.floor(Math.random()*Object.keys(cards).length);
             let playerCards=[];
             for (let i = playerCards.length; i < 5; i++) {
-                play
+                // play
             }
             playerCards.push(Object.keys(cards)[cardIndex]);
 
@@ -92,11 +92,13 @@
             });
         });
         playState = "playing";
+        unsubscribe();
     }
 
     //subscribe to players collection to get all players
     let allPlayers = [];
-    $: onSnapshot(playersColl, async (snapshot) => {
+    let unsubscribe;
+    unsubscribe = onSnapshot(playersColl, async (snapshot) => {
         if (playState != "playing") {
             allPlayers = []; // clear player list
             snapshot.docs.forEach((doc) => {
@@ -104,6 +106,7 @@
             })
         }
     })
+
 
     // let game;
     // $: onSnapshot(doc(db, "games", gameId), async (snapshot) => {
@@ -124,7 +127,7 @@
     }
 </script>
 
-
+<p>{playState}</p>
 {#if !playState}
 
     <h1>Play!</h1>
