@@ -39,42 +39,23 @@
             }
         });
     }
-
+    let roles = ["Entdecker", "Entdecker", "Wächter"];
+    let cards = {"empty": 8, "gold": 5, "fire": 2,}
+    
     async function startGame() {
         // distribute roles
-        let roles = ["Entdecker", "Entdecker", "Wächter"];
         allPlayers.forEach(async player => {
             // distribute random roles
             let index = Math.floor(Math.random()*roles.length);
             let playerRole = roles[index];
             roles.splice(index, 1); // remove from list
-
+            let playerCards = distributeCards();
+            console.log(playerCards);
             
             // add role to db
             await updateDoc(doc(db, "players", player.id), {
                 role: playerRole,
-                cards: {
-                    card1: {
-                        turned: false,
-                        value: playerCards[0],
-                    },
-                    card2: {
-                        turned: false,
-                        value: playerCards[1],
-                    },
-                    card3: {
-                        turned: false,
-                        value: playerCards[2],
-                    },
-                    card4: {
-                        turned: false,
-                        value: playerCards[3],
-                    },
-                    card5: {
-                        turned: false,
-                        value: playerCards[4],
-                    },
-                },
+                cards: playerCards,
             });
         });
         playState = "playing";
@@ -114,7 +95,6 @@
 
 
     function distributeCards() {
-        let cards = {"empty": 8, "gold": 5, "fire": 2,}
         let playerCards = [], cardIndex;
         
         // distribute random cards
@@ -132,6 +112,8 @@
                 delete cards[Object.keys(cards)[cardIndex]];
             }
         }
+
+        return playerCards;
     }
 </script>
 
