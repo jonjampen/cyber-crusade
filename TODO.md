@@ -17,7 +17,7 @@ The goal is to create an online card game for multiple players. It can be played
 - [x] option to start game -> creating games collection in db
 - [ ] getting updates from db
 - [x] distribution of roles -> creating players collection in db
-- [ ] distribution of cards -> adding them to db
+- [x] distribution of cards -> adding them to db
 ### V3 Game:
 - [ ] game logic (order of players, flip the cards, collecting cards by type)
 - [ ] visualization of cards
