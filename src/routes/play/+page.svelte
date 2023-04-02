@@ -4,6 +4,15 @@
     import { getFirestore, addDoc, collection, onSnapshot, getDocs, where, query, updateDoc, doc, setDoc } from "firebase/firestore";
     
     let playState = null, gameData, allPlayers = [];
+    let userData={
+        "uid": null,
+        "name": null,
+        "email": null,
+        "game": {
+            "id": null,
+            "cards": {},
+        },
+    };
     let roles = [];
     let cards = {"empty": 0, "gold": 0, "fire": 0};
 
@@ -24,31 +33,24 @@
         joinGame(null, gameId)
     }
 
-    function joinGame(event, gameId=false) {
-        // set id to input id (if  not set from createGame)
-        if (!gameId) {
-            gameId = parseInt(document.getElementById("gameIdInput").value);
-        }
-        
-        //get user data
-        authStore.subscribe(async ({ user, name }) => {
-            if (user) {
-                // check if user is already a player
-                let alreadyPlayer;
-                let playersWithSameId = await getDocs(query(playersColl, where("uid", "==", user.uid)))
-                playersWithSameId.forEach(doc => {
-                    alreadyPlayer = doc.data().uid
-                })
+    authStore.subscribe(async ({ user, name }) => {
+        if (user) {
+            // setting user information
+            userData.email = user.email;
+            userData.uid = user.uid;
+            userData.name = name;
 
-                // if not, add to players
-                if (!alreadyPlayer) {   
-                    let data = {
-                        uid: user.uid,
-                        name: name,
-                        gameId: gameId,
-                    }
-                    await addDoc(playersColl, data);
-                }
+            // check if user is already a player
+            let alreadyPlayer;
+            let playersWithSameId = await getDocs(query(playersColl, where("uid", "==", user.uid)))
+            playersWithSameId.forEach(doc => {
+                alreadyPlayer = doc.data().uid
+            })
+
+            if (alreadyPlayer) {
+                playState = "joined";
+                //! Get players game id
+                userData.game.id = 2;
 
                 // set game reference
                 gameRef = doc(db, "games", "2");
@@ -62,10 +64,41 @@
                         }
                     })
                 })
-
-                playState = "joined";
             }
-        });
+        }
+    });
+
+    async function joinGame(event, gameId=false) {
+        // set id to input id (if  not set from createGame)
+        if (!gameId) {
+            gameId = parseInt(document.getElementById("gameIdInput").value);
+        }
+        if (userData != {}) {
+            // if not, add to players
+            if (userData.game.id == null) {   
+                let data = {
+                    uid: userData.uid,
+                    name: userData.name,
+                    gameId: userData.game.id,
+                }
+                await addDoc(playersColl, data);
+            }
+
+            // set game reference
+            gameRef = doc(db, "games", "2");
+            // subscribe to changes in the games collection
+            let unsubscribeGame = onSnapshot(gamesColl, async (snapshot) => {
+                snapshot.docs.forEach((doc) => {
+                    // safe game data if it is current game
+                    if (doc.id == "2") {
+                        gameData = doc.data();
+                        console.log(gameData)
+                    }
+                })
+            })
+
+            playState = "joined";
+        }
     }
 
     function setByPlayers() {
@@ -147,7 +180,8 @@
     
 
 </script>
-
+<p>{userData.game.id}</p>
+<p>{userData.email}</p>
 {#if !playState}
 
     <h1>Play!</h1>
