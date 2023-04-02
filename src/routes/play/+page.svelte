@@ -148,8 +148,6 @@
 
 </script>
 
-<p>{playState}</p>
-<button on:click={distributeCards}>distribute Cards</button>
 {#if !playState}
 
     <h1>Play!</h1>
