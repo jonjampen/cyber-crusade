@@ -57,13 +57,14 @@
             let alreadyPlayer;
             let playersWithSameId = await getDocs(query(playersColl, where("uid", "==", user.uid)))
             playersWithSameId.forEach(doc => {
-                alreadyPlayer = doc.data().uid
+                alreadyPlayer = doc.data()
             })
 
             if (alreadyPlayer) {
                 playState = "joined";
                 //! Get players game id
-                userData.game.id = 2;
+                userData.game.id = alreadyPlayer.gameId;
+                console.log(alreadyPlayer)
 
                 // set game reference
                 gameRef = doc(db, "games", "2");
@@ -77,13 +78,16 @@
         if (!gameId) {
             gameId = parseInt(document.getElementById("gameIdInput").value);
         }
+
         if (userData != {}) {
-            // if not, add to players
-            if (userData.game.id == null) {   
+            // if not already a player, add to players
+            if (userData.game.id == null) {
+                userData.game.id = gameId;
+
                 let data = {
                     uid: userData.uid,
                     name: userData.name,
-                        gameId: userData.game.id,
+                    gameId: userData.game.id,
                 }
                 await addDoc(playersColl, data);
             }
@@ -175,8 +179,7 @@
     
 
 </script>
-<p>{userData.game.id}</p>
-<p>{userData.email}</p>
+
 {#if !playState}
 
     <h1>Play!</h1>
