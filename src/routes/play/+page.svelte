@@ -27,20 +27,19 @@
         let gameData = {
             gameState: "created",
         }
-        let gameId = "2";
+        let gameId = "2"; //! Random!
         setDoc(doc(db, "games", gameId), gameData)
 
         joinGame(null, gameId)
     }
 
-    function subscribeToGame() {
+    function subscribeToGame(id) {
         // subscribe to changes in the games collection
         return onSnapshot(gamesColl, async (snapshot) => {
             snapshot.docs.forEach((doc) => {
                 // safe game data if it is current game
-                if (doc.id == "2") {
+                if (doc.id == id.toString()) {
                     gameData = doc.data();
-                    console.log(gameData)
                 }
             });
         });
@@ -64,11 +63,10 @@
                 playState = "joined";
                 //! Get players game id
                 userData.game.id = alreadyPlayer.gameId;
-                console.log(alreadyPlayer)
 
                 // set game reference
                 gameRef = doc(db, "games", "2");
-                let unsubscribeGame = subscribeToGame();
+                let unsubscribeGame = subscribeToGame(userData.game.id);
             }
         }
     });
@@ -94,7 +92,7 @@
 
             // set game reference
             gameRef = doc(db, "games", "2");
-            let unsubscribeGame = subscribeToGame();
+            let unsubscribeGame = subscribeToGame(userData.game.id);
 
             playState = "joined";
         }
