@@ -33,6 +33,19 @@
         joinGame(null, gameId)
     }
 
+    function subscribeToGame() {
+        // subscribe to changes in the games collection
+        return onSnapshot(gamesColl, async (snapshot) => {
+            snapshot.docs.forEach((doc) => {
+                // safe game data if it is current game
+                if (doc.id == "2") {
+                    gameData = doc.data();
+                    console.log(gameData)
+                }
+            });
+        });
+    }
+
     authStore.subscribe(async ({ user, name }) => {
         if (user) {
             // setting user information
@@ -54,16 +67,7 @@
 
                 // set game reference
                 gameRef = doc(db, "games", "2");
-                // subscribe to changes in the games collection
-                let unsubscribeGame = onSnapshot(gamesColl, async (snapshot) => {
-                    snapshot.docs.forEach((doc) => {
-                        // safe game data if it is current game
-                        if (doc.id == "2") {
-                            gameData = doc.data();
-                            console.log(gameData)
-                        }
-                    })
-                })
+                let unsubscribeGame = subscribeToGame();
             }
         }
     });
@@ -79,23 +83,14 @@
                 let data = {
                     uid: userData.uid,
                     name: userData.name,
-                    gameId: userData.game.id,
+                        gameId: userData.game.id,
                 }
                 await addDoc(playersColl, data);
             }
 
             // set game reference
             gameRef = doc(db, "games", "2");
-            // subscribe to changes in the games collection
-            let unsubscribeGame = onSnapshot(gamesColl, async (snapshot) => {
-                snapshot.docs.forEach((doc) => {
-                    // safe game data if it is current game
-                    if (doc.id == "2") {
-                        gameData = doc.data();
-                        console.log(gameData)
-                    }
-                })
-            })
+            let unsubscribeGame = subscribeToGame();
 
             playState = "joined";
         }
