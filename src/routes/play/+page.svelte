@@ -65,7 +65,7 @@
                 userData.game.id = alreadyPlayer.gameId;
 
                 // set game reference
-                gameRef = doc(db, "games", "2");
+                gameRef = doc(db, "games", userData.game.id.toString());
                 let unsubscribeGame = subscribeToGame(userData.game.id);
             }
         }
@@ -91,7 +91,7 @@
             }
 
             // set game reference
-            gameRef = doc(db, "games", "2");
+            gameRef = doc(db, "games", userData.game.id.toString());
             let unsubscribeGame = subscribeToGame(userData.game.id);
 
             playState = "joined";
@@ -174,7 +174,6 @@
             playState = "playing";
         }
     }
-    
 
 </script>
 
