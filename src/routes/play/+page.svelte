@@ -2,7 +2,7 @@
     import "$lib/style.css";
     import authStore from "../../stores/authStore";
     import { app } from "../initializeFirebase";
-    import { getFirestore, addDoc, collection, onSnapshot, getDocs, where, query, updateDoc, doc, setDoc } from "firebase/firestore";
+    import { getFirestore, addDoc, collection, onSnapshot, getDocs, where, query, updateDoc, doc, setDoc, getDoc } from "firebase/firestore";
     
     let playState = null, gameData, allPlayers = [];
     let userData={
@@ -159,6 +159,35 @@
         
         return playerRole;
     }
+    
+    async function flipCard(e) {
+        let playerId = e.srcElement.attributes.playerid.value;
+        let cardIndex = e.srcElement.attributes.cardindex.value;
+        let docRef = doc(db, "players", playerId);
+        let newCards=[];
+
+        try {
+            newCards = await getDoc(docRef)
+            newCards = newCards.data().cards
+        } catch(error) {
+            console.error(error)
+            return;
+        }
+
+        newCards[cardIndex].turned = true;
+        console.log(newCards);
+
+        try {
+            await updateDoc(docRef, {
+                cards: newCards,
+            });
+        } catch(error) {
+            console.error(error)
+            return;
+        }
+        
+        console.log(playerId + " : " + cardIndex)
+    }
 
     //subscribe to players collection to get all players
     let unsubscribePlayers = onSnapshot(playersColl, async (snapshot) => {
@@ -203,8 +232,12 @@ console.log(allPlayers[0])
         <div class="player">
             <p>{player.name}</p>
             <div class="cards">
-                {#each player.cards as card}
-                    <div class="card">{card.value}</div>
+                {#each player.cards as card, i}
+                    <div class="card" playerid={player.id} cardindex={i} on:click={flipCard}>
+                        {#if card.turned}
+                            {card.value}
+                        {/if}
+                    </div>
                 {/each}
             </div>
         </div>
