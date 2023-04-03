@@ -1,4 +1,5 @@
 <script>
+    import "$lib/style.css";
     import authStore from "../../stores/authStore";
     import { app } from "../initializeFirebase";
     import { getFirestore, addDoc, collection, onSnapshot, getDocs, where, query, updateDoc, doc, setDoc } from "firebase/firestore";
@@ -174,7 +175,7 @@
             playState = "playing";
         }
     }
-
+console.log(allPlayers[0])
 </script>
 
 {#if !playState}
@@ -198,5 +199,15 @@
 {:else if playState == "playing"}
 
     <p>Playing</p>
+    {#each allPlayers as player}
+        <div class="player">
+            <p>{player.name}</p>
+            <div class="cards">
+                {#each player.cards as card}
+                    <div class="card">{card.value}</div>
+                {/each}
+            </div>
+        </div>
+    {/each}
     
 {/if}
