@@ -19,12 +19,19 @@ The goal is to create an online card game for multiple players. It can be played
 - [x] distribution of roles -> creating players collection in db
 - [x] distribution of cards -> adding them to db
 ### V3 Game:
-- [ ] game logic (order of players, flip the cards, collecting cards by type)
-- [ ] visualization of cards
+- [ ] game logic
+    - [x] show all players and their cards
+    - [x] flip cards by clicking on them (& update in db)
+    - [ ] add turned cards to game collection
+    - [ ] only allow flipping if current player
+    - [ ] display own role
+    - [ ] displaying collected cards, round #, and how many of each role
 - [ ] check for and handle game over
 - [ ] redistribute cards for new round
+    - [ ] check if x cards are turned
 ### V4 Extensions:
 - [ ] adjustments for more players
+- [ ] visualization of cards
 - [ ] several games at the same time
 - [ ] write the game instructions
 
