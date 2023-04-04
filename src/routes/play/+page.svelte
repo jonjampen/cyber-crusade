@@ -262,11 +262,11 @@ console.log(allPlayers[0])
 {:else if playState == "playing"}
 <div class="playing">
     <div class="sidenav">
-        <p>Round: 1/4</p>
+        <p>Round: {gameData.round}/4</p>
         <hr>
-        <p>System: 0/5</p>
-        <p>Honeypot: 0/2</p>
-        <p>Firewall: 0/8</p>
+        <p>System: {gameData.startCards.system - gameData.cards.system}/{gameData.startCards.system}</p>
+        <p>Honeypot: {gameData.startCards.honeypot - gameData.cards.honeypot}/{gameData.startCards.honeypot}</p>
+        <p>Firewall: {gameData.startCards.firewall - gameData.cards.firewall}/{gameData.startCards.firewall}</p>
         <hr>
         <p>Hacker: 2</p>
         <p>Agent: 1</p>
