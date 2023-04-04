@@ -73,6 +73,10 @@ input:focus {
     border: 1px solid #ee9725;
 }
 
+a {
+    color: var(--primary)
+}
+
 .player {
     background-color: lightblue;
     display: flex;
