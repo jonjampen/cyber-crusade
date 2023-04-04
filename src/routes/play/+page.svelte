@@ -207,10 +207,12 @@
         let gameDb = await getDoc(gameRef);
         gameDb = gameDb.data();
 
+        let user = await getDoc(docRef);
+
         gameDb.cards[cardType] -= 1
         updateDoc(gameRef, {
             cards: gameDb.cards,
-            currentPlayer: playerId
+            currentPlayer: user.data().uid,
         })
     }
 
@@ -243,9 +245,7 @@
             }
         }
     }
-console.log(allPlayers[0])
 </script>
-
 {#if !playState}
 
     <h1>Play!</h1>
