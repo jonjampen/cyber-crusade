@@ -100,7 +100,7 @@
     }
 
     function setByPlayers() {
-        roles.push("Hacker", "Hacker", "FBI");
+        roles.push("Hacker", "Hacker", "Agent");
         cards["firewall"] = 8;
         cards["system"] = 5;
         cards["honeypot"] = 2;
@@ -240,7 +240,7 @@ console.log(allPlayers[0])
         <p>Firewall: 0/8</p>
         <hr>
         <p>Hacker: 2</p>
-        <p>FBI: 1</p>
+        <p>Agent: 1</p>
     </div>
     <div class="players">
         {#each allPlayers as player}
