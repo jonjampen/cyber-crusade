@@ -15,7 +15,7 @@
         },
     };
     let roles = [];
-    let cards = {"empty": 0, "gold": 0, "fire": 0};
+    let cards = {"firewall": 0, "system": 0, "honeypot": 0};
 
     const db = getFirestore(app);
     const playersColl = collection(db, "players")
@@ -100,10 +100,10 @@
     }
 
     function setByPlayers() {
-        roles.push("Entdecker", "Entdecker", "Wächter");
-        cards["empty"] = 8;
-        cards["gold"] = 5;
-        cards["fire"] = 2;
+        roles.push("Hacker", "Hacker", "FBI");
+        cards["firewall"] = 8;
+        cards["system"] = 5;
+        cards["honeypot"] = 2;
     }
 
     async function startGame() {
@@ -235,12 +235,12 @@ console.log(allPlayers[0])
     <div class="sidenav">
         <p>Round: 1/4</p>
         <hr>
-        <p>Gold: 0/5</p>
-        <p>Fire: 0/2</p>
-        <p>Empty: 0/8</p>
+        <p>System: 0/5</p>
+        <p>Honeypot: 0/2</p>
+        <p>Firewall: 0/8</p>
         <hr>
-        <p>Entdecker: 2</p>
-        <p>Wächter: 1</p>
+        <p>Hacker: 2</p>
+        <p>FBI: 1</p>
     </div>
     <div class="players">
         {#each allPlayers as player}
