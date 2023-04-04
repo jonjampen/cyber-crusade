@@ -2,11 +2,12 @@
     import "$lib/style.css";
     import authStore from "../../stores/authStore";
     import { app } from "../initializeFirebase";
-    import { getFirestore, addDoc, collection, onSnapshot, getDocs, where, query, updateDoc, doc, setDoc, getDoc } from "firebase/firestore";
+    import { getFirestore, addDoc, collection, onSnapshot, getDocs, where, query, updateDoc, doc, setDoc, getDoc, deleteDoc } from "firebase/firestore";
     
     let playState = null, gameData, allPlayers = [];
     let userData={
         "uid": null,
+        "playeruid": null,
         "name": null,
         "email": null,
         "game": {
@@ -59,6 +60,7 @@
             let playersWithSameId = await getDocs(query(playersColl, where("uid", "==", user.uid)))
             playersWithSameId.forEach(doc => {
                 alreadyPlayer = doc.data()
+                userData.playeruid = doc.id;
             })
 
             if (alreadyPlayer) {
@@ -210,6 +212,12 @@
         })
     }
 
+    async function deleteGamePlayer() {
+        await deleteDoc(doc(db, "players", userData.playeruid.toString()));
+        await deleteDoc(doc(db, "games", userData.game.id.toString()));
+        window.location.reload();
+    }
+
     //subscribe to players collection to get all players
     let unsubscribePlayers = onSnapshot(playersColl, async (snapshot) => {
         allPlayers = []; // clear player list
@@ -280,4 +288,5 @@ console.log(allPlayers[0])
         {/each}
     </div>
 </div>
+<button on:click={deleteGamePlayer}>Delete Game & Player</button>
 {/if}
