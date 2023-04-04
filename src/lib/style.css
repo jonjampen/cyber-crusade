@@ -87,7 +87,7 @@ a, span {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    gap: 8px;
+    gap: 16px;
 }
 .sidenav {
     width: 120px;
