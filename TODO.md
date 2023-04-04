@@ -2,7 +2,7 @@
 By Jon Jampen
 
 ## Goal
-The goal is to create an online card game for multiple players. It can be played on a website which is built using Svelte and hosted on Vercel. The data is stored in a Firebase Firestore database. The game idea is based on a game called “Tempel des Schreckens”.
+The goal is to create an online card game for multiple players. It can be played on a website which is built using Svelte and hosted on Vercel. The data is stored in a Firebase Firestore database..
 
 ## Project Plan
 ### V1 User Sign Up:
@@ -25,8 +25,11 @@ The goal is to create an online card game for multiple players. It can be played
     - [x] add turned cards to game collection
     - [ ] only allow flipping if current player
     - [ ] display own role
-    - [ ] displaying collected cards, round #, and how many of each role
+    - [x] displaying collected cards, round #, and how many of each role
 - [ ] check for and handle game over
+    - [x] check game over (1)
+    - [ ] check game over (2: no rounds left)
+    - [ ] handle game over
 - [ ] redistribute cards for new round
     - [ ] check if x cards are turned
 ### V4 Extensions:
@@ -38,4 +41,3 @@ The goal is to create an online card game for multiple players. It can be played
 
 ## Additional Materials
 - Firebase documentation
-- “Tempel des Schreckens” game and instructions

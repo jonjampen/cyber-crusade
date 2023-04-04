@@ -232,6 +232,14 @@
         if (gameData.gameState == "playing") {
             playState = "playing";
         }
+        if (gameData.cards){
+            if (gameData.cards.honeypot == 0) {
+                console.log("Agents won!")
+            }
+            else if (gameData.cards.system == 0) {
+                console.log("Hackers won!")
+            }
+        }
     }
 console.log(allPlayers[0])
 </script>
