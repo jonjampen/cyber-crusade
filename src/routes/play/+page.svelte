@@ -219,14 +219,16 @@ console.log(allPlayers[0])
     <button on:click={createGame}>Create Game</button>
 
 {:else if playState == "joined"}
-
-    <h2>Waiting Room</h2>
-    <p>You joined the game</p>
+<div class="waiting">
+    <h1>Waiting Room</h1>
+    <p>Join the game at <a href="https://cyber-crusade.vercel.app">www.cyber-crusade.vercel.app</a> with the game ID:</p>
+    <h2><span>{userData.game.id}</span></h2>
     <h4>Players:</h4>
     {#each allPlayers as player}
-        <p>{player.name}</p>
+    <p>{player.name}</p>
     {/each}
     <button on:click={startGame}>Start Game</button>
+</div>
 
 {:else if playState == "playing"}
 

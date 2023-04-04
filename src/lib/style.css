@@ -47,6 +47,11 @@ form {
 .login button {
     width: 100%;
 }
+.waiting {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
 
 form input {
     width: 100%;
@@ -73,7 +78,7 @@ input:focus {
     border: 1px solid #ee9725;
 }
 
-a {
+a, span {
     color: var(--primary)
 }
 
