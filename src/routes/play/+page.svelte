@@ -282,7 +282,11 @@ console.log(allPlayers[0])
     <div class="players">
         {#each allPlayers as player}
         <div class="player">
-            <h3>{player.name}</h3>
+            {#if player.uid == userData.uid}
+                <h3>{player.name} ({player.role})</h3>
+            {:else}
+                <h3>{player.name}</h3>
+            {/if}
             <div class="cards">
                 {#each player.cards as card, i}
                 <div class="card" playerid={player.id} cardindex={i} on:click={flipCard}>
