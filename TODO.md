@@ -24,7 +24,7 @@ The goal is to create an online card game for multiple players. It can be played
     - [x] flip cards by clicking on them (& update in db)
     - [x] add turned cards to game collection
     - [ ] only allow flipping if current player
-    - [ ] display own role
+    - [x] display own role
     - [x] displaying collected cards, round #, and how many of each role
 - [ ] check for and handle game over
     - [x] check game over (1)
