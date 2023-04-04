@@ -231,21 +231,32 @@ console.log(allPlayers[0])
 </div>
 
 {:else if playState == "playing"}
-
-    <p>Playing</p>
-    {#each allPlayers as player}
+<div class="playing">
+    <div class="sidenav">
+        <p>Round: 1/4</p>
+        <hr>
+        <p>Gold: 0/5</p>
+        <p>Fire: 0/2</p>
+        <p>Empty: 0/8</p>
+        <hr>
+        <p>Entdecker: 2</p>
+        <p>Wächter: 1</p>
+    </div>
+    <div class="players">
+        {#each allPlayers as player}
         <div class="player">
-            <p>{player.name}</p>
+            <h3>{player.name}</h3>
             <div class="cards">
                 {#each player.cards as card, i}
-                    <div class="card" playerid={player.id} cardindex={i} on:click={flipCard}>
-                        {#if card.turned}
-                            {card.value}
-                        {/if}
-                    </div>
+                <div class="card" playerid={player.id} cardindex={i} on:click={flipCard}>
+                    {#if card.turned}
+                        {card.value}
+                    {/if}
+                </div>
                 {/each}
             </div>
         </div>
-    {/each}
-    
+        {/each}
+    </div>
+</div>
 {/if}

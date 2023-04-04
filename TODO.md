@@ -32,6 +32,7 @@ The goal is to create an online card game for multiple players. It can be played
 ### V4 Extensions:
 - [ ] adjustments for more players
 - [ ] visualization of cards
+- [x] improve design
 - [ ] several games at the same time
 - [ ] write the game instructions
 
