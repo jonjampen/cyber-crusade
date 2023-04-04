@@ -137,6 +137,7 @@
                 system: 5,
                 honeypot: 2,
             },
+            currentPlayer: userData.uid,
         })
 
         playState = "playing";
@@ -189,7 +190,7 @@
         }
 
         newCards[cardIndex].turned = true;
-        
+        // update players cards
         try {
             await updateDoc(docRef, {
                 cards: newCards,
@@ -209,6 +210,7 @@
         gameDb.cards[cardType] -= 1
         updateDoc(gameRef, {
             cards: gameDb.cards,
+            currentPlayer: playerId
         })
     }
 
@@ -282,11 +284,17 @@ console.log(allPlayers[0])
     <div class="players">
         {#each allPlayers as player}
         <div class="player">
-            {#if player.uid == userData.uid}
-                <h3>{player.name} ({player.role})</h3>
-            {:else}
-                <h3>{player.name}</h3>
-            {/if}
+            
+                <h3>
+                    {#if gameData.currentPlayer == player.uid}
+                        *{player.name}*
+                    {:else}
+                        {player.name}
+                    {/if}
+                    {#if player.uid == userData.uid}
+                        ({player.role})
+                    {/if}
+                </h3>
             <div class="cards">
                 {#each player.cards as card, i}
                 <div class="card" playerid={player.id} cardindex={i} on:click={flipCard}>
