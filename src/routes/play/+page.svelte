@@ -210,9 +210,12 @@ console.log(allPlayers[0])
 {#if !playState}
 
     <h1>Play!</h1>
-    <input type="text" name="gameId" id="gameIdInput">
+    <h3>Join a Game</h3>
+    <input type="text" name="gameId" id="gameIdInput" placeholder="Game ID">
     <button on:click={joinGame}>Join Game</button>
     <br>
+    <br>
+    <h3>Create a new Game</h3>
     <button on:click={createGame}>Create Game</button>
 
 {:else if playState == "joined"}
