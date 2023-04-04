@@ -4,9 +4,21 @@
     let email, password;
     
 </script>
-    <h1>Log In</h1>
-    <form on:submit={signUpUser(email, password)} id="signUpForm">
-        <input type="text" name="email" id="signUpEmailInput" bind:value={email}>
-        <input type="password" name="password" id="signUpPasswordInput" bind:value={password}>
-        <button type="submit" id="signupSubmit">Sign Up</button>
-    </form>
+<main class="login-page">
+    <div class="login">
+        <h1>Log In</h1>
+        <form on:submit={signUpUser(email, password)} id="signUpForm">
+            <div class="field">
+                <label for="signUpEmailInput">Email</label>
+                <input type="text" name="email" id="signUpEmailInput" bind:value={email} placeholder="name@example.com">
+            </div>
+            <div class="field">
+                <label for="signUpPasswordInput">Password</label>
+                <input type="password" name="password" id="signUpPasswordInput" bind:value={password} placeholder="••••••••">
+            </div>
+            <div class="field">
+                <button type="submit" id="signupSubmit">Sign Up</button>
+            </div>
+        </form>
+    </div>
+</main>

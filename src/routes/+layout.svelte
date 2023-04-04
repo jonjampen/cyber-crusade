@@ -1,4 +1,5 @@
 <script>
+import "$lib/style.css";
 import { initializeApp } from "firebase/app";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { getFirestore, addDoc, collection, onSnapshot, getDocs, query, where } from "firebase/firestore";
