@@ -12,6 +12,7 @@
         "game": {
             "id": null,
             "cards": {},
+            "round": 1,
         },
     };
     let roles = [];
@@ -123,6 +124,17 @@
         // set gameState in db to playing
         await setDoc(gameRef, {
             gameState: "playing",
+            round: 1,
+            startCards: {
+                firewall: 8,
+                system: 5,
+                honeypot: 2,
+            },
+            cards: {
+                firewall: 8,
+                system: 5,
+                honeypot: 2,
+            },
         })
 
         playState = "playing";
@@ -163,6 +175,8 @@
     async function flipCard(e) {
         let playerId = e.srcElement.attributes.playerid.value;
         let cardIndex = e.srcElement.attributes.cardindex.value;
+        let cardType = e.srcElement.attributes.cardtype.value;
+
         let docRef = doc(db, "players", playerId);
         let newCards=[];
 
@@ -175,7 +189,6 @@
         }
 
         newCards[cardIndex].turned = true;
-        console.log(newCards);
 
         try {
             await updateDoc(docRef, {
@@ -186,7 +199,16 @@
             return;
         }
         
-        console.log(playerId + " : " + cardIndex)
+        // Update cards in game db
+        let gameRef = doc(db, "games", userData.game.id)
+        let gameDb = await getDoc(gameRef);
+        gameDb = gameDb.data();
+
+        gameDb.cards[cardType] -= 1
+
+        updateDoc(gameRef, {
+            cards: gameDb.cards,
+        })
     }
 
     //subscribe to players collection to get all players
@@ -248,7 +270,7 @@ console.log(allPlayers[0])
             <h3>{player.name}</h3>
             <div class="cards">
                 {#each player.cards as card, i}
-                <div class="card" playerid={player.id} cardindex={i} on:click={flipCard}>
+                <div class="card" playerid={player.id} cardindex={i} cardtype={card.value} on:click={flipCard}>
                     {#if card.turned}
                         {card.value}
                     {/if}
