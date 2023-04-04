@@ -297,7 +297,7 @@
                 </h3>
             <div class="cards">
                 {#each player.cards as card, i}
-                <div class="card" playerid={player.id} cardindex={i} on:click={flipCard}>
+                <div class="{gameData.currentPlayer == userData.uid && player.uid != userData.uid ? 'activePlayer' : ''} card" playerid={player.id} cardindex={i} on:click={gameData.currentPlayer == userData.uid && player.uid != userData.uid ? flipCard : ''}>
                     {#if card.turned}
                         {card.value}
                     {/if}
@@ -310,3 +310,5 @@
 </div>
 <button on:click={deleteGamePlayer}>Delete Game & Player</button>
 {/if}
+
+<!-- class="{gameData.currentPlayer == userData.uid ? 'activePlayer' : ''} card" -->
