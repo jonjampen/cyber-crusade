@@ -37,6 +37,8 @@ The goal is to create an online card game for multiple players. It can be played
 - [ ] adjustments for more players
 - [ ] visualization of cards
 - [x] improve design
+- [ ] Bug fixes
+    - [x] disable click if already flipped
 - [ ] several games at the same time
 - [ ] write the game instructions
 
