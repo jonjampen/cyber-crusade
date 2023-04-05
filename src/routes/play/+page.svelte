@@ -226,7 +226,13 @@
     let unsubscribePlayers = onSnapshot(playersColl, async (snapshot) => {
         allPlayers = []; // clear player list
         snapshot.docs.forEach((doc) => {
-            allPlayers.push({ ...doc.data(), id: doc.id })
+            let cardsAmount = {"firewall": 0, "honeypot": 0, "system": 0}
+            if (doc.data().cards) {
+                doc.data().cards.forEach(card => {
+                    cardsAmount[card.value] += 1;
+                })
+            }
+            allPlayers.push({ ...doc.data(), id: doc.id, cardsAmount })
         })
     })
 
@@ -304,6 +310,9 @@
                 </div>
                 {/each}
             </div>
+            {#if player.uid == userData.uid}
+            <b>Your Cards:</b> Firewall: {player.cardsAmount.firewall}, honeypot: {player.cardsAmount.honeypot}, system: {player.cardsAmount.system},
+            {/if}
         </div>
         {/each}
     </div>
