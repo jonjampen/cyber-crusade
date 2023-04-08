@@ -29,9 +29,9 @@ The goal is to create an online card game for multiple players. It can be played
     - [x] show the user their cards & shuffle for the other players
 - [ ] check for and handle game over
     - [x] check game over (1)
-    - [ ] check game over (2: no rounds left)
+    - [x] check game over (2: no rounds left)
     - [ ] handle game over
-- [ ] redistribute cards for new round
+- [x] redistribute cards for new round
     - [x] check if x cards are turned
 ### V4 Extensions:
 - [ ] adjustments for more players
@@ -39,8 +39,8 @@ The goal is to create an online card game for multiple players. It can be played
 - [x] improve design
 - [ ] Bug fixes
     - [x] disable click if already flipped
-- [ ] several games at the same time
 - [ ] write the game instructions
+- [ ] several games at the same time
 
 ## Additional Materials
 - Firebase documentation

@@ -79,8 +79,9 @@
         round = 1;
         // set id to input id (if  not set from createGame)
         if (!gameId) {
-            gameId = parseInt(document.getElementById("gameIdInput").value);
+            gameId = document.getElementById("gameIdInput").value;
         }
+        gameId = parseInt(gameId);
 
         if (userData != {}) {
             // if not already a player, add to players
@@ -228,21 +229,25 @@
             let gameDb = await getDoc(doc(db, "games", userData.game.id.toString()));
             let dbCards = gameDb.data().cards;
             round = gameDb.data().round + 1;
-            
-            cards = Array(dbCards.firewall).fill("firewall").concat(Array(dbCards.honeypot).fill("honeypot").concat(Array(dbCards.system).fill("system")))
-            console.log("New Round:" + round);
-
-            allPlayers.forEach(async player => {
-                let playerCards = distributeCards(6 - round);
-                // add new cards to db
-                await updateDoc(doc(db, "players", player.id), {
-                    cards: playerCards,
-                });
-            })
-
-            await updateDoc(doc(db, "games", userData.game.id), {
-                round: round,
-            })
+            if (round < 5) {
+                cards = Array(dbCards.firewall).fill("firewall").concat(Array(dbCards.honeypot).fill("honeypot").concat(Array(dbCards.system).fill("system")))
+                console.log("New Round:" + round);
+    
+                allPlayers.forEach(async player => {
+                    let playerCards = distributeCards(6 - round);
+                    // add new cards to db
+                    await updateDoc(doc(db, "players", player.id), {
+                        cards: playerCards,
+                    });
+                })
+    
+                await updateDoc(doc(db, "games", userData.game.id.toString()), {
+                    round: round,
+                })
+            }
+            else {
+                console.log("Game ended")
+            }
         }
     }
 
