@@ -4,7 +4,7 @@
     import { app } from "../initializeFirebase";
     import { getFirestore, addDoc, collection, onSnapshot, getDocs, where, query, updateDoc, doc, setDoc, getDoc, deleteDoc } from "firebase/firestore";
     
-    let playState = null, gameData, allPlayers = [], turnedCards;
+    let playState = null, gameData, allPlayers = [], turnedCards, round;
     let userData={
         "uid": null,
         "playeruid": null,
@@ -76,6 +76,7 @@
     });
 
     async function joinGame(event, gameId=false) {
+        round = 1;
         // set id to input id (if  not set from createGame)
         if (!gameId) {
             gameId = parseInt(document.getElementById("gameIdInput").value);
@@ -210,6 +211,10 @@
             cards: gameDb.cards,
             currentPlayer: user.data().uid,
         })
+
+        if (turnedCards == 3) {
+            startNewRound();
+        }
     }
 
     async function deleteGamePlayer() {
@@ -219,14 +224,16 @@
     }
 
     async function startNewRound() {
-        console.log("New Round");
         if (userData.game.id) {
             let gameDb = await getDoc(doc(db, "games", userData.game.id.toString()));
             let dbCards = gameDb.data().cards;
+            round = gameDb.data().round + 1;
+            
             cards = Array(dbCards.firewall).fill("firewall").concat(Array(dbCards.honeypot).fill("honeypot").concat(Array(dbCards.system).fill("system")))
+            console.log("New Round:" + round);
 
             allPlayers.forEach(async player => {
-                let playerCards = distributeCards(4);
+                let playerCards = distributeCards(6 - round);
                 // add new cards to db
                 await updateDoc(doc(db, "players", player.id), {
                     cards: playerCards,
@@ -234,7 +241,7 @@
             })
 
             await updateDoc(doc(db, "games", userData.game.id), {
-                round: 2,
+                round: round,
             })
         }
     }
@@ -275,9 +282,6 @@
                 console.log("Hackers won!")
             }
         }
-    }
-    $: if (turnedCards == 3) {
-        startNewRound();
     }
 </script>
 {#if !playState}
