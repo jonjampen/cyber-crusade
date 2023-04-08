@@ -4,7 +4,7 @@
     import { app } from "../initializeFirebase";
     import { getFirestore, addDoc, collection, onSnapshot, getDocs, where, query, updateDoc, doc, setDoc, getDoc, deleteDoc } from "firebase/firestore";
     
-    let playState = null, gameData, allPlayers = [];
+    let playState = null, gameData, allPlayers = [], turnedCards;
     let userData={
         "uid": null,
         "playeruid": null,
@@ -203,7 +203,6 @@
         // Update cards in game db
         let cardType = newCards[cardIndex].value;
         let gameRef = doc(db, "games", userData.game.id.toString())
-        console.log(userData.game.id)
         let gameDb = await getDoc(gameRef);
         gameDb = gameDb.data();
 
@@ -225,7 +224,8 @@
     //subscribe to players collection to get all players
     let unsubscribePlayers = onSnapshot(playersColl, async (snapshot) => {
         allPlayers = []; // clear player list
-        snapshot.docs.forEach((doc) => {
+        turnedCards = 0;
+        snapshot.docs.forEach((doc) => { // doc = player
             let cardsAmount = {"firewall": 0, "honeypot": 0, "system": 0}
             if (doc.data().cards) {
                 doc.data().cards.forEach(card => {
@@ -233,12 +233,19 @@
                 })
             }
             allPlayers.push({ ...doc.data(), id: doc.id, cardsAmount })
+            if (doc.data().cards) {
+                let allCards = doc.data().cards;
+                allCards.forEach(card => {
+                    if (card.turned) {
+                        turnedCards += 1;
+                    }
+                })
+            }
         })
     })
 
     // change game state if game is started (even by other players)
     $: if (gameData) {
-        console.log(gameData.gameState)
         if (gameData.gameState == "playing") {
             playState = "playing";
         }
@@ -276,6 +283,7 @@
 </div>
 
 {:else if playState == "playing"}
+{turnedCards}
 <div class="playing">
     <div class="sidenav">
         <p>Round: {gameData.round}/4</p>
