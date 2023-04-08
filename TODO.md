@@ -32,7 +32,7 @@ The goal is to create an online card game for multiple players. It can be played
     - [ ] check game over (2: no rounds left)
     - [ ] handle game over
 - [ ] redistribute cards for new round
-    - [ ] check if x cards are turned
+    - [x] check if x cards are turned
 ### V4 Extensions:
 - [ ] adjustments for more players
 - [ ] visualization of cards

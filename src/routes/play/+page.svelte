@@ -118,7 +118,7 @@
         setByPlayers();
         allPlayers.forEach(async player => {
             let playerRole = distributeRoles();
-            let playerCards = distributeCards();
+            let playerCards = distributeCards(5);
             
             // add role & cards to db
             await updateDoc(doc(db, "players", player.id), {
@@ -147,11 +147,11 @@
         playState = "playing";
     }
 
-    function distributeCards() {
+    function distributeCards(numberOfCards) {
         let playerCards = [];
 
         // distribute random cards
-        for (var i = 0; i < 5; i++) { // foreach card
+        for (var i = 0; i < numberOfCards; i++) { // foreach card
             let index = Math.floor(Math.random()*cards.length);
             playerCards.push({
                 value: cards[index], // card value (= the key in cards array)
@@ -220,6 +220,23 @@
 
     async function startNewRound() {
         console.log("New Round");
+        if (userData.game.id) {
+            let gameDb = await getDoc(doc(db, "games", userData.game.id.toString()));
+            let dbCards = gameDb.data().cards;
+            cards = Array(dbCards.firewall).fill("firewall").concat(Array(dbCards.honeypot).fill("honeypot").concat(Array(dbCards.system).fill("system")))
+
+            allPlayers.forEach(async player => {
+                let playerCards = distributeCards(4);
+                // add new cards to db
+                await updateDoc(doc(db, "players", player.id), {
+                    cards: playerCards,
+                });
+            })
+
+            await updateDoc(doc(db, "games", userData.game.id), {
+                round: 2,
+            })
+        }
     }
 
     //subscribe to players collection to get all players
