@@ -17,7 +17,7 @@
         },
     };
     let roles = [];
-    let cards = {"firewall": 0, "system": 0, "honeypot": 0};
+    let cards = [];
 
     const db = getFirestore(app);
     const playersColl = collection(db, "players")
@@ -104,9 +104,13 @@
 
     function setByPlayers() {
         roles.push("Hacker", "Hacker", "Agent");
-        cards["firewall"] = 8;
-        cards["system"] = 5;
-        cards["honeypot"] = 2;
+
+        let firewall = [], system = [], honeypot = [];
+
+        firewall = Array(8).fill("firewall")
+        system = Array(5).fill("system")
+        honeypot = Array(2).fill("honeypot")
+        cards = firewall.concat(system).concat(honeypot);
     }
 
     async function startGame() {
@@ -144,23 +148,16 @@
     }
 
     function distributeCards() {
-        let playerCards = [], cardIndex;
-        
+        let playerCards = [];
+
         // distribute random cards
-        while (playerCards.length < 5) {
-            cardIndex = Math.floor(Math.random()*Object.keys(cards).length); // random number: index of cards
-            cards[Object.keys(cards)[cardIndex]] -= 1; // remove from array
-            
-            // add to playerCards
+        for (var i = 0; i < 5; i++) { // foreach card
+            let index = Math.floor(Math.random()*cards.length);
             playerCards.push({
-                value: Object.keys(cards)[cardIndex], // card value (= the key in cards array)
+                value: cards[index], // card value (= the key in cards array)
                 turned: false,
             });
-
-            // remove if none of type is left
-            if (cards[Object.keys(cards)[cardIndex]] == 0) {
-                delete cards[Object.keys(cards)[cardIndex]];
-            }
+            cards.splice(index, 1); // remove from list
         }
 
         return playerCards;
