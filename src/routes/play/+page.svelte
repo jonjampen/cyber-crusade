@@ -221,6 +221,10 @@
         window.location.reload();
     }
 
+    async function startNewRound() {
+        console.log("New Round");
+    }
+
     //subscribe to players collection to get all players
     let unsubscribePlayers = onSnapshot(playersColl, async (snapshot) => {
         allPlayers = []; // clear player list
@@ -257,6 +261,9 @@
                 console.log("Hackers won!")
             }
         }
+    }
+    $: if (turnedCards == 3) {
+        startNewRound();
     }
 </script>
 {#if !playState}
