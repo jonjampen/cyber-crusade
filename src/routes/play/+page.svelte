@@ -303,7 +303,7 @@
 {:else if playState == "joined"}
 <div class="waiting">
     <h1>Waiting Room</h1>
-    <p>Join the game at <a href="https://cyber-crusade.vercel.app">www.cyber-crusade.vercel.app</a> with the game ID:</p>
+    <p>Join the game at <a href="https://cyber-crusade.vercel.app">cyber-crusade.vercel.app</a> with the game ID:</p>
     <h2><span>{userData.game.id}</span></h2>
     <h4>Players:</h4>
     {#each allPlayers as player}
