@@ -341,11 +341,13 @@
                 </h3>
             <div class="cards">
                 {#each player.cards as card, i}
-                <div class="{gameData.currentPlayer == userData.uid && player.uid != userData.uid && card.turned != true ? 'activePlayer' : ''} card" playerid={player.id} cardindex={i} on:click={gameData.currentPlayer == userData.uid && player.uid != userData.uid && card.turned != true ? flipCard : ''}>
-                    {#if card.turned}
-                        {card.value}
-                    {/if}
-                </div>
+                    <img
+                        class="{gameData.currentPlayer == userData.uid && player.uid != userData.uid && card.turned != true ? 'activePlayer' : ''} card"
+                        playerid={player.id}
+                        cardindex={i}
+                        on:click={gameData.currentPlayer == userData.uid && player.uid != userData.uid && card.turned != true ? flipCard : ''}
+                        src="/computers/{card.turned == true ? card.value : 'flipped'}.svg"
+                    >
                 {/each}
             </div>
             {#if player.uid == userData.uid}
