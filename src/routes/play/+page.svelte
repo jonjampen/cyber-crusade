@@ -4,7 +4,7 @@
     import { app } from "../initializeFirebase";
     import { getFirestore, addDoc, collection, onSnapshot, getDocs, where, query, updateDoc, doc, setDoc, getDoc, deleteDoc } from "firebase/firestore";
     
-    let playState = null, gameData, allPlayers = [], turnedCards, round;
+    let playState = null, gameData, allPlayers = [], turnedCards, round, numberOfPlayers;
     let userData={
         "uid": null,
         "playeruid": null,
@@ -18,6 +18,29 @@
     };
     let roles = [];
     let cards = [];
+
+    let cardsByPlayers = {
+        "3": {
+            "firewall": 8,
+            "system": 5,
+            "honeypot": 2,
+        },
+        "5": {
+            "firewall": 16,
+            "system": 7,
+            "honeypot": 2,
+        },
+    }
+    let rolesByPlayers = {
+        "3": {
+            "hacker": 2,
+            "agent": 1,
+        },
+        "5": {
+            "hacker": 3,
+            "agent": 2,
+        },
+    }
 
     const db = getFirestore(app);
     const playersColl = collection(db, "players")
@@ -104,20 +127,20 @@
         }
     }
 
-    function setByPlayers() {
-        roles.push("Hacker", "Hacker", "Agent");
+    function setByPlayers(numberOfPlayers) {
+        roles = Array(rolesByPlayers[numberOfPlayers.toString()].hacker).fill("Hacker").concat(Array(rolesByPlayers[numberOfPlayers.toString()].agent).fill("Agent"));
 
         let firewall = [], system = [], honeypot = [];
-
-        firewall = Array(8).fill("firewall")
-        system = Array(5).fill("system")
-        honeypot = Array(2).fill("honeypot")
+        firewall = Array(cardsByPlayers[numberOfPlayers.toString()].firewall).fill("firewall")
+        system = Array(cardsByPlayers[numberOfPlayers.toString()].system).fill("system")
+        honeypot = Array(cardsByPlayers[numberOfPlayers.toString()].honeypot).fill("honeypot")
         cards = firewall.concat(system).concat(honeypot);
     }
 
     async function startGame() {
         // distribute roles
-        setByPlayers();
+        console.log(allPlayers.numberOfPlayers)
+        setByPlayers(allPlayers.numberOfPlayers);
         allPlayers.forEach(async player => {
             let playerRole = distributeRoles();
             let playerCards = distributeCards(5);
@@ -134,14 +157,14 @@
             gameState: "playing",
             round: 1,
             startCards: {
-                firewall: 8,
-                system: 5,
-                honeypot: 2,
+                firewall: cardsByPlayers[allPlayers.numberOfPlayers.toString()].firewall,
+                system: cardsByPlayers[allPlayers.numberOfPlayers.toString()].system,
+                honeypot: cardsByPlayers[allPlayers.numberOfPlayers.toString()].honeypot,
             },
             cards: {
-                firewall: 8,
-                system: 5,
-                honeypot: 2,
+                firewall: cardsByPlayers[allPlayers.numberOfPlayers.toString()].firewall,
+                system: cardsByPlayers[allPlayers.numberOfPlayers.toString()].system,
+                honeypot: cardsByPlayers[allPlayers.numberOfPlayers.toString()].honeypot,
             },
             currentPlayer: userData.uid,
         })
@@ -253,6 +276,7 @@
 
     //subscribe to players collection to get all players
     let unsubscribePlayers = onSnapshot(playersColl, async (snapshot) => {
+        numberOfPlayers = 0;
         allPlayers = []; // clear player list
         turnedCards = 0;
         snapshot.docs.forEach((doc) => { // doc = player
@@ -262,7 +286,8 @@
                     cardsAmount[card.value] += 1;
                 })
             }
-            allPlayers.push({ ...doc.data(), id: doc.id, cardsAmount })
+            numberOfPlayers++;
+            allPlayers.push({ ...doc.data(), id: doc.id, cardsAmount})
             if (doc.data().cards) {
                 let allCards = doc.data().cards;
                 allCards.forEach(card => {
@@ -272,6 +297,7 @@
                 })
             }
         })
+        allPlayers.numberOfPlayers = numberOfPlayers;
     })
 
     // change game state if game is started (even by other players)
@@ -289,6 +315,7 @@
         }
     }
 </script>
+{cardsByPlayers["5"].firewall}
 {#if !playState}
 
     <h1>Play!</h1>
@@ -313,7 +340,6 @@
 </div>
 
 {:else if playState == "playing"}
-{turnedCards}
 <div class="playing">
     <div class="sidenav">
         <p>Round: {gameData.round}/4</p>
