@@ -236,8 +236,9 @@
             currentPlayer: user.data().uid,
         })
 
-        if (turnedCards == 3) {
-            startNewRound();
+        if (turnedCards == allPlayers.numberOfPlayers) {
+            alert("Round ended");
+            startNewRound()
         }
     }
 
@@ -315,7 +316,6 @@
         }
     }
 </script>
-{cardsByPlayers["5"].firewall}
 {#if !playState}
 
     <h1>Play!</h1>
@@ -377,7 +377,7 @@
                 {/each}
             </div>
             {#if player.uid == userData.uid}
-            <b>Your Cards:</b> Firewall: {player.cardsAmount.firewall}, honeypot: {player.cardsAmount.honeypot}, system: {player.cardsAmount.system},
+            <b>Your Cards:</b> Firewall: {player.cardsAmount.firewall}, Honeypot: {player.cardsAmount.honeypot}, System: {player.cardsAmount.system},
             {/if}
         </div>
         {/each}
