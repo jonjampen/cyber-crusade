@@ -359,7 +359,7 @@
                     {player.name}
 
                     {#if player.uid == userData.uid}
-                        (<i title="{player.role == "agent" ? 'Agents try to direct hackers to honeypots.' : 'Hackers try to find vulnerable systems.'}">{player.role}</i>)
+                        (<i title="{player.role == "Agent" ? 'Agents try to direct hackers to honeypots.' : 'Hackers try to find vulnerable systems.'}">{player.role}</i>)
                     {/if}
                 </h3>
                 {#if player.uid == userData.uid}
