@@ -8,6 +8,7 @@ export function signUpUser(email, password) {
     .then((userCredential) => {
         console.log("Logged in")
         const user = userCredential.user;
+        window.location = '/play';
     })
     .catch((error) => {
         const errorCode = error.code;

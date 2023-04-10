@@ -34,7 +34,7 @@ The goal is to create an online card game for multiple players. It can be played
 - [x] redistribute cards for new round
     - [x] check if x cards are turned
 ### V4 Extensions:
-- [ ] adjustments for more players
+- [WIP] adjustments for more players
 - [ ] visualization of cards
 - [x] improve design
 - [ ] Bug fixes
