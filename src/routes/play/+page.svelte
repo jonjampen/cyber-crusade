@@ -308,10 +308,10 @@
         }
         if (gameData.cards){
             if (gameData.cards.honeypot == 0) {
-                console.log("Agents won!")
+                alert("Agents won!")
             }
             else if (gameData.cards.system == 0) {
-                console.log("Hackers won!")
+                alert("Hackers won!")
             }
         }
     }
@@ -348,8 +348,8 @@
         <p>Honeypot: {gameData.startCards.honeypot - gameData.cards.honeypot}/{gameData.startCards.honeypot}</p>
         <p>Firewall: {gameData.startCards.firewall - gameData.cards.firewall}/{gameData.startCards.firewall}</p>
         <hr>
-        <p>Hacker: 2</p>
-        <p>Agent: 1</p>
+        <p>Hacker: {rolesByPlayers[numberOfPlayers.toString()].hacker}</p>
+        <p>Agent: {rolesByPlayers[numberOfPlayers.toString()].agent}</p>
     </div>
     <div class="players">
         {#each allPlayers as player}
