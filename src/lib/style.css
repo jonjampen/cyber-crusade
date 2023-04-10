@@ -3,6 +3,7 @@
     --white: #ffffff;
     --gray: #D9DCE1;
     --primary: #ee9725;
+    --active: #f9c6c1;
     --primary-light: #f9e1c1;
 }
 
@@ -104,11 +105,18 @@ a, span {
 .player {
     background-color: var(--primary-light);
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 16px;
     border-radius: 8px;
+    padding-left: 16px;
+}
+.thisPlayer {
+    background-color: var(--white);
+}
+.player-info {
+    width: 100px;
 }
 .cards {
     width: 100%;
@@ -116,18 +124,22 @@ a, span {
     flex-direction: row;
     justify-content: space-evenly;
     align-items: center;
-    margin-bottom: 8px;
+    margin: 8px 0px;
 }
 .card {
     /* flex-basis: auto; */
     max-width: 33%;
-    max-height: 150px;
+    max-height: 120px;
     /* height: auto;
     width: auto; */
     text-align: center;
     cursor: auto;
     border-radius: 8px;
 }
-.activePlayer {
+.clickable {
     cursor: pointer;
+}
+
+.activePlayer {
+    background-color: var(--primary);
 }

@@ -353,22 +353,25 @@
     </div>
     <div class="players">
         {#each allPlayers as player}
-        <div class="player">
-            
+        <div class="player {player.uid == userData.uid ? 'thisPlayer' : ''} {gameData.currentPlayer == player.uid ? 'activePlayer' : ''}">
+            <div class="player-info">
                 <h3>
-                    {#if gameData.currentPlayer == player.uid}
-                        *{player.name}*
-                    {:else}
-                        {player.name}
-                    {/if}
+                    {player.name}
+
                     {#if player.uid == userData.uid}
-                        ({player.role})
+                        (<i title="{player.role == "agent" ? 'Agents try to direct hackers to honeypots.' : 'Hackers try to find vulnerable systems.'}">{player.role}</i>)
                     {/if}
                 </h3>
+                {#if player.uid == userData.uid}
+                    Firewall: {player.cardsAmount.firewall}
+                    Honeypot: {player.cardsAmount.honeypot}
+                    System: {player.cardsAmount.system}
+                {/if}
+            </div>
             <div class="cards">
                 {#each player.cards as card, i}
                     <img
-                        class="{gameData.currentPlayer == userData.uid && player.uid != userData.uid && card.turned != true ? 'activePlayer' : ''} card"
+                        class="{gameData.currentPlayer == userData.uid && player.uid != userData.uid && card.turned != true ? 'clickable' : ''} card"
                         playerid={player.id}
                         cardindex={i}
                         on:click={gameData.currentPlayer == userData.uid && player.uid != userData.uid && card.turned != true ? flipCard : ''}
@@ -376,9 +379,6 @@
                     >
                 {/each}
             </div>
-            {#if player.uid == userData.uid}
-            <b>Your Cards:</b> Firewall: {player.cardsAmount.firewall}, Honeypot: {player.cardsAmount.honeypot}, System: {player.cardsAmount.system},
-            {/if}
         </div>
         {/each}
     </div>
