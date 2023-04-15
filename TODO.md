@@ -27,19 +27,19 @@ The goal is to create an online card game for multiple players. It can be played
     - [x] display own role
     - [x] displaying collected cards, round #, and how many of each role
     - [x] show the user their cards & shuffle for the other players
-- [ ] check for and handle game over
+- [x] check for and handle game over
     - [x] check game over (1)
     - [x] check game over (2: no rounds left)
-    - [ ] handle game over
+    - [x] handle game over
 - [x] redistribute cards for new round
     - [x] check if x cards are turned
 ### V4 Extensions:
-- [WIP] adjustments for more players
+- [x] adjustments for more players
 - [x] visualization of cards
 - [x] improve design
 - [ ] Bug fixes
     - [x] disable click if already flipped
-    - [ ] display login error
+    - [x] display login error (currently only with alert)
     - [x] redirect after login
 - [ ] write the game instructions
 - [ ] several games at the same time
