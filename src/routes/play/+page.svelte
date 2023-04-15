@@ -3,7 +3,8 @@
     import authStore from "../../stores/authStore";
     import { app } from "../initializeFirebase";
     import { getFirestore, addDoc, collection, onSnapshot, getDocs, where, query, updateDoc, doc, setDoc, getDoc, deleteDoc } from "firebase/firestore";
-    
+    import { rolesByPlayers, cardsByPlayers } from "$lib/dataByPlayers"
+
     let playState = null, gameData, allPlayers = [], turnedCards, round, numberOfPlayers;
     let userData={
         "uid": null,
@@ -19,28 +20,6 @@
     let roles = [];
     let cards = [];
 
-    let cardsByPlayers = {
-        "3": {
-            "firewall": 8,
-            "system": 5,
-            "honeypot": 2,
-        },
-        "5": {
-            "firewall": 16,
-            "system": 7,
-            "honeypot": 2,
-        },
-    }
-    let rolesByPlayers = {
-        "3": {
-            "hacker": 2,
-            "agent": 1,
-        },
-        "5": {
-            "hacker": 3,
-            "agent": 2,
-        },
-    }
 
     const db = getFirestore(app);
     const playersColl = collection(db, "players")
