@@ -35,12 +35,15 @@ The goal is to create an online card game for multiple players. It can be played
     - [x] check if x cards are turned
 ### V4 Extensions:
 - [WIP] adjustments for more players
-- [ ] visualization of cards
+- [x] visualization of cards
 - [x] improve design
 - [ ] Bug fixes
     - [x] disable click if already flipped
+    - [ ] display login error
+    - [x] redirect after login
 - [ ] write the game instructions
 - [ ] several games at the same time
+- [ ] scorer board
 
 ## Additional Materials
 - Firebase documentation
