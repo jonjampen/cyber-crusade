@@ -3,7 +3,8 @@
     import authStore from "../../stores/authStore";
     import { app } from "../initializeFirebase";
     import { getFirestore, addDoc, collection, onSnapshot, getDocs, where, query, updateDoc, doc, setDoc, getDoc, deleteDoc } from "firebase/firestore";
-    import { rolesByPlayers, cardsByPlayers } from "$lib/dataByPlayers"
+    import { rolesByPlayers, cardsByPlayers } from "$lib/dataByPlayers";
+    import { customAlphabet } from 'nanoid';
 
     let playState = null, gameData, allPlayers = [], turnedCards, round, numberOfPlayers;
     let userData={
@@ -26,14 +27,30 @@
     const gamesColl = collection(db, "games")
     let gameRef;
 
+    async function setGameId() {
+        const nanoid = customAlphabet('1234567890', 6)
 
-    function createGame() {
+        let tempGameId = nanoid();
+        let gameRef = await getDoc(doc(db, "games", tempGameId.toString()));
+        
+        // check if game id is already taken
+        if (typeof gameRef.data() == "undefined") {
+            console.log(tempGameId)
+            return tempGameId;
+        }
+        else {
+            setGameId();
+        }
+    }
+
+    async function createGame() {
         // create game document
         let gameData = {
             gameState: "created",
         }
-        let gameId = "2"; //! Random!
-        setDoc(doc(db, "games", gameId), gameData)
+
+        let gameId = await setGameId();
+        setDoc(doc(db, "games", gameId.toString()), gameData)
 
         joinGame(null, gameId)
     }
