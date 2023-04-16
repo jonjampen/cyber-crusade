@@ -379,5 +379,7 @@
         {/each}
     </div>
 </div>
-<!-- <button on:click={deleteGamePlayer}>Delete Game & Player</button> -->
+<button on:click={deleteGamePlayer}>Delete Game & Player</button>
 {/if}
+
+<!-- class="{gameData.currentPlayer == userData.uid ? 'activePlayer' : ''} card" -->
