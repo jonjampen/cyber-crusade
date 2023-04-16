@@ -28,7 +28,7 @@
     let gameRef;
 
     async function setGameId() {
-        const nanoid = customAlphabet('1234567890', 6)
+        const nanoid = customAlphabet('123456789', 6)
 
         let tempGameId = nanoid();
         let gameRef = await getDoc(doc(db, "games", tempGameId.toString()));
@@ -304,9 +304,11 @@
         }
         if (gameData.cards){
             if (gameData.cards.honeypot == 0) {
+                playState = "over";
                 alert("Agents won!")
             }
             else if (gameData.cards.system == 0) {
+                playState = "over"
                 alert("Hackers won!")
             }
         }
@@ -335,7 +337,7 @@
     <button on:click={startGame}>Start Game</button>
 </div>
 
-{:else if playState == "playing"}
+{:else if playState == "playing" || playState == "over"}
 <div class="playing">
     <div class="sidenav">
         <p>Round: {gameData.round}/4</p>
@@ -354,13 +356,13 @@
                 <h3>
                     {player.name}
 
-                    {#if player.uid == userData.uid}
+                    {#if player.uid == userData.uid || playState == "over"}
                         (<i title="{player.role == "Agent" ? 'Agents try to direct hackers to honeypots.' : 'Hackers try to find vulnerable systems.'}">{player.role}</i>)
                     {/if}
                 </h3>
                 {#if player.uid == userData.uid}
-                    Firewall: {player.cardsAmount.firewall}
-                    Honeypot: {player.cardsAmount.honeypot}
+                    Firewall: {player.cardsAmount.firewall} <br>
+                    Honeypot: {player.cardsAmount.honeypot} <br>
                     System: {player.cardsAmount.system}
                 {/if}
             </div>
