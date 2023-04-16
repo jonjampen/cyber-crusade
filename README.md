@@ -1,10 +1,2 @@
-# Instructions
-aljsdf asdföjlas
-## Game Idea
-ajkfj alsdkfj aösldf.
-
-## dadd
-aksfjd alskdjfaösd
-
-# More
+# Online Card Game
 [See Project Plan](/TODO.md)
