@@ -45,7 +45,6 @@ The goal is to create an online card game for multiple players. It can be played
 - [ ] several games at the same time
 - [ ] scorer board
 - game over when all rounds over
-- 0 first number of game id does not work
 
 ## Additional Materials
 - Firebase documentation
