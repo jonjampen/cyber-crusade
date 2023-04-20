@@ -17,7 +17,7 @@
                 <input type="password" name="password" id="signUpPasswordInput" bind:value={password} placeholder="••••••••">
             </div>
             <div class="field">
-                <button type="submit" id="signupSubmit">Sign Up</button>
+                <button type="submit" id="signupSubmit">Log In</button>
             </div>
         </form>
         <p>Don't have an account yet? <a href="/signup">Sign Up</a></p>
