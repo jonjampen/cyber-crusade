@@ -94,6 +94,12 @@
         }
     });
 
+    function joinGameEnter(event) {
+        if (event.key === "Enter") {
+            joinGame(event);
+        }
+    }
+
     async function joinGame(event, gameId=false) {
         round = 1;
         // set id to input id (if  not set from createGame)
@@ -318,7 +324,7 @@
 
     <h1>Play!</h1>
     <h3>Join a Game</h3>
-    <input type="text" name="gameId" id="gameIdInput" placeholder="Game ID">
+    <input type="text" name="gameId" id="gameIdInput" placeholder="Game ID" on:keydown={joinGameEnter}>
     <button on:click={joinGame}>Join Game</button>
     <br>
     <br>
