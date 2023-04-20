@@ -6,14 +6,14 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 const playersColl = collection(db, "users")
 
-export function signUpUser(name, email, password) {
+export async function signUpUser(name, email, password) {
     createUserWithEmailAndPassword(auth, email, password)
-    .then((userCredential) => {
+    .then(async (userCredential) => {
         let data = {
             uid: userCredential.user.uid,
             name: name,
         }
-        addDoc(playersColl, data);
+        await addDoc(playersColl, data)
 
         console.log("Logged in")
         const user = userCredential.user;
