@@ -16,6 +16,8 @@
 	"type": "module",
 	"dependencies": {
 		"firebase": "^9.17.2",
+		"marked": "^4.3.0",
+		"markit": "^0.2.0",
 		"nanoid": "^3.3.6"
 	}
 }

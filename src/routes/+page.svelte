@@ -1,5 +1,9 @@
 <script>
+    import { marked } from 'marked';
 
+    let markdown = `# Hello\n## How are you?\nThis text is **bold**`;
+    let instructions = marked(markdown);
+   
 </script>
 
-<h1>Cyber Crusade</h1>
+<p>{@html instructions}</p>
