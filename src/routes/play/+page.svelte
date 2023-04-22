@@ -319,6 +319,11 @@
             }
         }
     }
+
+    function newGame() {
+        startGame();
+        joinGame();
+    }
 </script>
 {#if !playState}
 
@@ -387,7 +392,7 @@
         {/each}
     </div>
 </div>
-<button on:click={deleteGamePlayer}>Delete Game & Player</button>
+<button on:click={newGame}>New Game</button>
 {/if}
 
 <!-- class="{gameData.currentPlayer == userData.uid ? 'activePlayer' : ''} card" -->
