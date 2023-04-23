@@ -280,6 +280,7 @@
             }
             else {
                 console.log("Game ended")
+                gameOver("Agent");
             }
         }
     }
@@ -304,7 +305,7 @@
                     if (card.turned) {
                         turnedCards += 1;
                     }
-                })
+                });
             }
         })
         allPlayers.numberOfPlayers = numberOfPlayers;
@@ -318,13 +319,34 @@
         if (gameData.cards){
             if (gameData.cards.honeypot == 0) {
                 playState = "over";
-                alert("Agents won!")
+                gameOver("Agent");
             }
             else if (gameData.cards.system == 0) {
                 playState = "over"
-                alert("Hackers won!")
+                gameOver("Hacker");
             }
         }
+    }
+
+    async function gameOver(winner) {
+        let win;
+        allPlayers.forEach((player) => {
+            if (player.id == userData.playeruid) {
+                console.log(winner + " " + player.role)
+                if (winner === player.role) {
+                    win = true;
+                }
+                else {
+                    win = false;
+                }
+            }
+        })
+
+        await updateDoc(doc(db, "players", userData.playeruid), {
+            win
+        });
+
+        alert(winner + " won!")
     }
 
     function newGame() {
