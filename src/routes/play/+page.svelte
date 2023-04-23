@@ -366,6 +366,8 @@
         <hr>
         <p>Hacker: {rolesByPlayers[numberOfPlayers.toString()].hacker}</p>
         <p>Agent: {rolesByPlayers[numberOfPlayers.toString()].agent}</p>
+        <hr>
+        <button on:click={newGame}>Start New Game</button>
     </div>
     <div class="players">
         {#each allPlayers as player}
@@ -399,7 +401,6 @@
         {/each}
     </div>
 </div>
-<button on:click={newGame}>New Game</button>
 {/if}
 
 <!-- class="{gameData.currentPlayer == userData.uid ? 'activePlayer' : ''} card" -->
