@@ -328,8 +328,14 @@
     }
 
     function newGame() {
-        startGame();
-        joinGame();
+        let nextConfirmation = confirm("Are you sure you want to start a new game? Your current game will be deleted!");
+        if (nextConfirmation) {
+            startGame();
+            joinGame();
+        }
+        else {
+            return;
+        }
     }
 </script>
 {#if !playState}
