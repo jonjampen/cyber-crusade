@@ -100,6 +100,13 @@
         }
     }
 
+    // start Game with enter
+    document.addEventListener("keydown", (event) => {
+        if (event.keyCode === 13 && playState == "joined") {
+            startGame();
+        }
+    });
+
     async function joinGame(event, gameId=false) {
         round = 1;
         // set id to input id (if  not set from createGame)
