@@ -1,5 +1,8 @@
 <script>
+    import Instructions from '$lib/Instructions.md';
 
 </script>
 
-<h1>Cyber Crusade</h1>
+<div>
+    <Instructions />
+</div>
