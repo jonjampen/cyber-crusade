@@ -1,7 +1,30 @@
-<script>
+<script context="module">
     import ChartWinsLosses  from "./chartWinsLosses.svelte";
-</script>
 
+    import authStore from "../../../stores/authStore";
+    import { app } from "../../initializeFirebase";
+    import { getFirestore, collection, getDocs, where, query, doc, getDoc } from "firebase/firestore";
+
+    export let wins=0, losses=0;
+
+    const db = getFirestore(app);
+    const playersColl = collection(db, "players")
+    
+    getData();
+
+    async function getData() {
+        let players = await getDocs(query(playersColl, where("uid", "==", "1URfvG2X1zTayhyeRqdC2JUBDJu2")));
+        players.forEach((player) => {
+            if (player.data().win == true) {
+                wins++;
+            }
+            else if (player.data().win == false) {
+                losses++;
+            }
+        })
+    }
+
+</script>
 <div class="userInfo">
     <p class="name">{name}</p>
     <p class="level">Grandmaster</p>
