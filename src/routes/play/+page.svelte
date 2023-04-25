@@ -378,7 +378,9 @@
     <h2><span>{userData.game.id}</span></h2>
     <h4>Players:</h4>
     {#each allPlayers as player}
-    <p>{player.name}</p>
+        {#if player.gameId === userData.game.id}
+            <p>{player.name}</p>
+        {/if}
     {/each}
     <button on:click={startGame}>Start Game</button>
 </div>
@@ -399,36 +401,38 @@
     </div>
     <div class="players">
         {#each allPlayers as player}
-        <div class="player {player.uid == userData.uid ? 'thisPlayer' : ''} {gameData.currentPlayer == player.uid ? 'activePlayer' : ''}">
-            <div class="player-info">
-                <h3>
-                    {player.name}
+            {#if player.gameId === userData.game.id}
+            <div class="player {player.uid == userData.uid ? 'thisPlayer' : ''} {gameData.currentPlayer == player.uid ? 'activePlayer' : ''}">
+                <div class="player-info">
+                    <h3>
+                        {player.name}
 
-                    {#if player.uid == userData.uid || playState == "over"}
-                        (<i title="{player.role == "Agent" ? 'Agents try to direct hackers to honeypots.' : 'Hackers try to find vulnerable systems.'}">{player.role}</i>)
+                        {#if player.uid == userData.uid || playState == "over"}
+                            (<i title="{player.role == "Agent" ? 'Agents try to direct hackers to honeypots.' : 'Hackers try to find vulnerable systems.'}">{player.role}</i>)
+                        {/if}
+                    </h3>
+                    {#if player.uid == userData.uid}
+                        Firewall: {player.cardsAmount.firewall} <br>
+                        Honeypot: {player.cardsAmount.honeypot} <br>
+                        System: {player.cardsAmount.system}
                     {/if}
-                </h3>
-                {#if player.uid == userData.uid}
-                    Firewall: {player.cardsAmount.firewall} <br>
-                    Honeypot: {player.cardsAmount.honeypot} <br>
-                    System: {player.cardsAmount.system}
-                {/if}
+                </div>
+                <div class="cards">
+                    {#each player.cards as card, i}
+                        <img
+                            class="{gameData.currentPlayer == userData.uid && player.uid != userData.uid && card.turned != true ? 'clickable' : ''} card"
+                            playerid={player.id}
+                            cardindex={i}
+                            on:click={gameData.currentPlayer == userData.uid && player.uid != userData.uid && card.turned != true ? flipCard : ''}
+                            src="/computers/{card.turned == true ? card.value : 'flipped'}.svg"
+                        >
+                    {/each}
+                </div>
             </div>
-            <div class="cards">
-                {#each player.cards as card, i}
-                    <img
-                        class="{gameData.currentPlayer == userData.uid && player.uid != userData.uid && card.turned != true ? 'clickable' : ''} card"
-                        playerid={player.id}
-                        cardindex={i}
-                        on:click={gameData.currentPlayer == userData.uid && player.uid != userData.uid && card.turned != true ? flipCard : ''}
-                        src="/computers/{card.turned == true ? card.value : 'flipped'}.svg"
-                    >
-                {/each}
-            </div>
-        </div>
+            {/if}
         {/each}
     </div>
 </div>
 {/if}
-
+{userData.game.id}
 <!-- class="{gameData.currentPlayer == userData.uid ? 'activePlayer' : ''} card" -->

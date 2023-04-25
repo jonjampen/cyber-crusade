@@ -7,7 +7,7 @@ import { goto } from "$app/navigation";
 import { page } from "$app/stores";
 import { onMount } from "svelte";
 import authStore from "../stores/authStore"
-
+let theName;
 onMount(() => {
     const firebaseConfig = {
         apiKey: "AIzaSyBgGsxHQnm4A_QanvUuibQIuWvg0vnKZOs",
@@ -23,7 +23,6 @@ onMount(() => {
     const usersColl = collection(db, "users");
 
     onAuthStateChanged(auth, async (user) => {
-        let theName;
         let users = await getDocs(query(usersColl, where("uid", "==", user.uid)))
         users.forEach(doc => {
             theName = doc.data().name;
@@ -50,6 +49,7 @@ authStore.subscribe(async ({ isLoggedIn, user }) => {
 </script>
 <nav>
     <ul>
+        {theName}
         <li><a href="/">Instructions</a></li>
         <li><a href="/play">Play Game</a></li>
         <li><a href="/login">Login</a></li>
