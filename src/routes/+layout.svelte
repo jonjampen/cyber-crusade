@@ -59,7 +59,7 @@ authStore.subscribe(async ({ isLoggedIn, user }) => {
     </ul>
 </nav>
 
-{#if !loginState && $page.url.pathname !== "/login" && $page.url.pathname !== "/signup" && $page.url.pathname !== "/logout"}
+{#if !loginState && $page.url.pathname !== "/login" && $page.url.pathname !== "/signup" && $page.url.pathname !== "/logout" && $page.url.pathname !== "/"}
     <h3>If you are already logged in, the game will start shortly.</h3>
     <a href="/login"><button>Go to login</button></a>
 {:else}
