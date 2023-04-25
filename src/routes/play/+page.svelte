@@ -86,7 +86,7 @@
                 playState = "joined";
                 //! Get players game id
                 userData.game.id = alreadyPlayer.gameId;
-
+                
                 // set game reference
                 gameRef = doc(db, "games", userData.game.id.toString());
                 let unsubscribeGame = subscribeToGame(userData.game.id);
@@ -155,7 +155,7 @@
         })
         
         // distribute roles
-        console.log(realNumberOfPlayers)
+        console.log("NOP: " + realNumberOfPlayers)
         setByPlayers(realNumberOfPlayers);
 
         allPlayers.forEach(async player => {
@@ -297,17 +297,19 @@
 
     //subscribe to players collection to get all players
     let unsubscribePlayers = onSnapshot(playersColl, async (snapshot) => {
-        numberOfPlayers = 0;
+        realNumberOfPlayers = 0;
         allPlayers = []; // clear player list
         turnedCards = 0;
         snapshot.docs.forEach((doc) => { // doc = player
             let cardsAmount = {"firewall": 0, "honeypot": 0, "system": 0}
-            if (doc.data().cards) {
+            if (doc.data().cards && doc.data().gameId === userData.game.id) {
+                console.log("HEY!")
                 doc.data().cards.forEach(card => {
                     cardsAmount[card.value] += 1;
                 })
+                realNumberOfPlayers++;
+                console.log(realNumberOfPlayers)
             }
-            numberOfPlayers++;
             allPlayers.push({ ...doc.data(), id: doc.id, cardsAmount})
             if (doc.data().cards) {
                 let allCards = doc.data().cards;
@@ -318,7 +320,6 @@
                 });
             }
         })
-        allPlayers.numberOfPlayers = numberOfPlayers;
     })
 
     // change game state if game is started (even by other players)
@@ -404,8 +405,8 @@
         <p>Honeypot: {gameData.startCards.honeypot - gameData.cards.honeypot}/{gameData.startCards.honeypot}</p>
         <p>Firewall: {gameData.startCards.firewall - gameData.cards.firewall}/{gameData.startCards.firewall}</p>
         <hr>
-        <p>Hacker: {rolesByPlayers[numberOfPlayers.toString()].hacker}</p>
-        <p>Agent: {rolesByPlayers[numberOfPlayers.toString()].agent}</p>
+        <p>Hacker: {rolesByPlayers[realNumberOfPlayers.toString()].hacker}</p>
+        <p>Agent: {rolesByPlayers[realNumberOfPlayers.toString()].agent}</p>
         <hr>
         <button on:click={newGame}>Start New Game</button>
     </div>
