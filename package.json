@@ -17,6 +17,7 @@
 	"type": "module",
 	"dependencies": {
 		"firebase": "^9.17.2",
-		"nanoid": "^3.3.6"
+		"nanoid": "^3.3.6",
+		"svelte-apexcharts": "^1.0.2"
 	}
 }
