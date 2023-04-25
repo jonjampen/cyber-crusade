@@ -1,27 +1,13 @@
 <script>
-  import { chart } from "svelte-apexcharts";
-  let options = {
-    chart: {
-      type: "bar",
-    },
-    series: [
-      {
-        name: "sales",
-        data: [30, 40, 35, 50, 49, 60, 70, 91, 125],
-      },
-    ],
-    xaxis: {
-      categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999],
-    },
-  };
-
+    import ChartWinsLosses  from "./chartWinsLosses.svelte";
 </script>
 
 <div class="userInfo">
-    <p class="name">Jon</p>
+    <p class="name">{name}</p>
     <p class="level">Grandmaster</p>
     <div class="winstat">
         win/lose chart
+        <ChartWinsLosses />
     </div>
 </div>
 <div class="stats">
@@ -36,4 +22,3 @@
     </div>
 </div>
 
-    <div class="chart" use:chart={options} stlye="color: black !important"/>
