@@ -300,19 +300,17 @@
         realNumberOfPlayers = 0;
         allPlayers = []; // clear player list
         turnedCards = 0;
-        snapshot.docs.forEach((doc) => { // doc = player
+        snapshot.docs.forEach((player) => { 
             let cardsAmount = {"firewall": 0, "honeypot": 0, "system": 0}
-            if (doc.data().cards && doc.data().gameId === userData.game.id) {
-                console.log("HEY!")
-                doc.data().cards.forEach(card => {
+            if (player.data().cards && player.data().gameId === userData.game.id) {
+                player.data().cards.forEach(card => {
                     cardsAmount[card.value] += 1;
                 })
                 realNumberOfPlayers++;
-                console.log(realNumberOfPlayers)
             }
-            allPlayers.push({ ...doc.data(), id: doc.id, cardsAmount})
-            if (doc.data().cards) {
-                let allCards = doc.data().cards;
+            allPlayers.push({ ...player.data(), id: player.id, cardsAmount})
+            if (player.data().cards) {
+                let allCards = player.data().cards;
                 allCards.forEach(card => {
                     if (card.turned) {
                         turnedCards += 1;
@@ -445,5 +443,4 @@
     </div>
 </div>
 {/if}
-{userData.game.id}
 <!-- class="{gameData.currentPlayer == userData.uid ? 'activePlayer' : ''} card" -->
