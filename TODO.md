@@ -41,6 +41,7 @@ The goal is to create an online card game for multiple players. It can be played
     - [x] disable click if already flipped
     - [x] display login error (currently only with alert)
     - [x] redirect after login
+    - [ ] not updating all players when new round...
 - [x] write the game instructions
 - [x] several games at the same time
 - [ ] scorer board
