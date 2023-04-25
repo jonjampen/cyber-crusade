@@ -1,9 +1,8 @@
 <script>
-    import { marked } from 'marked';
+    import Instructions from '$lib/Instructions.md';
 
-    let markdown = `# Hello\n## How are you?\nThis text is **bold**`;
-    let instructions = marked(markdown);
-   
 </script>
 
-<p>{@html instructions}</p>
+<div>
+    <Instructions />
+</div>
