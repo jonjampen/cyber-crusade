@@ -6,7 +6,7 @@
     import { rolesByPlayers, cardsByPlayers } from "$lib/dataByPlayers";
     import { customAlphabet } from 'nanoid';
 
-    let playState = null, gameData, allPlayers = [], turnedCards, round, numberOfPlayers;
+    let playState = null, gameData, allPlayers = [], turnedCards, round, numberOfPlayers, realNumberOfPlayers;
     let userData={
         "uid": null,
         "playeruid": null,
@@ -147,18 +147,28 @@
     }
 
     async function startGame() {
+        realNumberOfPlayers = 0;
+        allPlayers.forEach((player) => {
+            if (player.gameId === userData.game.id) {
+                realNumberOfPlayers++;
+            }
+        })
+        
         // distribute roles
-        console.log(allPlayers.numberOfPlayers)
-        setByPlayers(allPlayers.numberOfPlayers);
+        console.log(realNumberOfPlayers)
+        setByPlayers(realNumberOfPlayers);
+
         allPlayers.forEach(async player => {
-            let playerRole = distributeRoles();
-            let playerCards = distributeCards(5);
-            
-            // add role & cards to db
-            await updateDoc(doc(db, "players", player.id), {
-                role: playerRole,
-                cards: playerCards,
-            });
+            if (player.gameId === userData.game.id) {
+                let playerRole = distributeRoles();
+                let playerCards = distributeCards(5);
+                
+                // add role & cards to db
+                await updateDoc(doc(db, "players", player.id), {
+                    role: playerRole,
+                    cards: playerCards,
+                });
+            }
         });
 
         // set gameState in db to playing
@@ -166,14 +176,14 @@
             gameState: "playing",
             round: 1,
             startCards: {
-                firewall: cardsByPlayers[allPlayers.numberOfPlayers.toString()].firewall,
-                system: cardsByPlayers[allPlayers.numberOfPlayers.toString()].system,
-                honeypot: cardsByPlayers[allPlayers.numberOfPlayers.toString()].honeypot,
+                firewall: cardsByPlayers[realNumberOfPlayers.toString()].firewall,
+                system: cardsByPlayers[realNumberOfPlayers.toString()].system,
+                honeypot: cardsByPlayers[realNumberOfPlayers.toString()].honeypot,
             },
             cards: {
-                firewall: cardsByPlayers[allPlayers.numberOfPlayers.toString()].firewall,
-                system: cardsByPlayers[allPlayers.numberOfPlayers.toString()].system,
-                honeypot: cardsByPlayers[allPlayers.numberOfPlayers.toString()].honeypot,
+                firewall: cardsByPlayers[realNumberOfPlayers.toString()].firewall,
+                system: cardsByPlayers[realNumberOfPlayers.toString()].system,
+                honeypot: cardsByPlayers[realNumberOfPlayers.toString()].honeypot,
             },
             currentPlayer: userData.uid,
         })
@@ -245,7 +255,7 @@
             currentPlayer: user.data().uid,
         })
 
-        if (turnedCards == allPlayers.numberOfPlayers) {
+        if (turnedCards == realNumberOfPlayers) {
             alert("Round ended");
             startNewRound()
         }
