@@ -41,10 +41,9 @@ The goal is to create an online card game for multiple players. It can be played
     - [x] disable click if already flipped
     - [x] display login error (currently only with alert)
     - [x] redirect after login
-- [ ] write the game instructions
-- [ ] several games at the same time
+- [x] write the game instructions
+- [x] several games at the same time
 - [ ] scorer board
-- game over when all rounds over
 
 ## Additional Materials
 - Firebase documentation
