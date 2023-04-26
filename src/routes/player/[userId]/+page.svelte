@@ -1,5 +1,6 @@
 <script context="module">
     import ChartWinsLosses  from "./chartWinsLosses.svelte";
+    import { page } from '$app/stores';
 
     import authStore from "../../../stores/authStore";
     import { app } from "../../initializeFirebase";
@@ -25,6 +26,7 @@
     }
 
 </script>
+{$page.params.slug}
 <div class="userInfo">
     <p class="name">{name}</p>
     <p class="level">Grandmaster</p>

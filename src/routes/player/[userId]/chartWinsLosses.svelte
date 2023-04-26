@@ -5,7 +5,7 @@
     let options;
 
     $: options = {
-        series: [wins, losses],
+        series: [wins , losses],
         chart: {
           width: 200,
           type: 'pie',
