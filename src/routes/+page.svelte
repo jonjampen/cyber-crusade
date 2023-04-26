@@ -1,5 +1,5 @@
 <script>
-    import Instructions from '$lib/Instructions.md';
+    import Instructions from '$lib/instructions.md';
 
 </script>
 <Instructions />
