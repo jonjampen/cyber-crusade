@@ -7,7 +7,7 @@ import { goto } from "$app/navigation";
 import { page } from "$app/stores";
 import { onMount } from "svelte";
 import authStore from "../stores/authStore"
-let theName;
+let theName, userId;
 onMount(() => {
     const firebaseConfig = {
         apiKey: "AIzaSyBgGsxHQnm4A_QanvUuibQIuWvg0vnKZOs",
@@ -41,7 +41,9 @@ authStore.subscribe(async ({ isLoggedIn, user }) => {
         loginState = false;
     }
     else {
+        userId = user.uid;
         console.log("is logged in");
+        console.log(userId);
         loginState = true;
     }
 });
@@ -49,12 +51,15 @@ authStore.subscribe(async ({ isLoggedIn, user }) => {
 </script>
 <nav>
     <ul>
-        {theName}
+        
         <li><a href="/">Instructions</a></li>
-        <li><a href="/play">Play Game</a></li>
-        <li><a href="/login">Login</a></li>
-        <li><a href="/signup">Sign up</a></li>
-        <li><a href="/logout">Logout</a></li>
+        {#if loginState}
+            <li><a href="/play">Play Game</a></li>
+            <li><a href="/player/{userId}">Profile</a></li>
+        {:else}
+            <li><a href="/login">Login</a></li>
+            <li><a href="/signup">Sign up</a></li>
+        {/if}
         <li><a target="_blank" href="https://www.github.com/jonjampen/cyber-crusade"><img height="32px" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" /></li>
     </ul>
 </nav>

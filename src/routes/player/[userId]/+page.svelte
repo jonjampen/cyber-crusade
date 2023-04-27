@@ -3,7 +3,7 @@
 </script>
 
 <div class="userInfo">
-    <p class="name">Jon</p>
+    <p class="name">Jon <a href="/logout">Logout</a></p>
     <p class="level">Grandmaster</p>
     <div class="winstat">
         win/lose chart
