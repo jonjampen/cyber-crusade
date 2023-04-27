@@ -9,7 +9,7 @@ The agents try to prevent that by either stalling time or by decoying to hack in
 You are randomly given a role, either hacker or agent (you can see your role below your name when playing a game). Each member gets 5 computer systems which they are responsible for (below your name you can see what types of computer systems you have).
 
 ### Types of computer systems
-- **Honeypot:** Honeypots are bad for hackers since they alert the security system of the FBI. If two (or three, depending on how many players are playing) honeypots are attacked, the hackers loose and the agents win.
+- **Honeypot:** Honeypots are bad for hackers since they alert the security system. If two (or three, depending on how many players are playing) honeypots are attacked, the hackers loose and the agents win.
 - **Firewall:** Firewalls protect systems from getting hacked. They don't do any damage.
 - **System:** Systems - or vulnerable systems - are the systems that are hackable. Hackers need access to all available vulnerable systems to win the game.
 
