@@ -30,11 +30,17 @@ There are three possible outcomes:
 2. Agents win: All the required honeypots are found
 3. Agents win: You have played all four rounds and none of the other two possible outcomes occurred.
 
+<hr style="border: 1px solid var(--primary)">
+
 # About This Project
+## Contribute / Feedback
+If you find a bug or have a feature request, please create an issue on my Github repository: <a href="https://github.com/jonjampen/cyber-crusade/issues" target="_blank">Submit an issue</a>
+
+## Project
 This project was built by Jon Jampen as a project for school. It is built with SvelteKit and Firestore.
 
-[Project on Github](https://github.com/jonjampen/cyber-crusade/)
+<a href="https://github.com/jonjampen/cyber-crusade/" target="_blank">Project on Github</a>
 
 [Contact](mailto:jon.jampen@cryptography.ch)
 
-[Project Plan](https://github.com/jonjampen/cyber-crusade/blob/main/TODO.md)
+<a href="https://github.com/jonjampen/cyber-crusade/blob/main/TODO.md" target="_blank">Project Plan</a>
