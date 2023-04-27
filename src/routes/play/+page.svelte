@@ -277,11 +277,14 @@
                 console.log("New Round:" + round);
     
                 allPlayers.forEach(async player => {
-                    let playerCards = distributeCards(6 - round);
-                    // add new cards to db
-                    await updateDoc(doc(db, "players", player.id), {
-                        cards: playerCards,
-                    });
+                    console.log(player.gameId + " , " + userData.game.id)
+                    if (player.gameId === userData.game.id) {
+                        let playerCards = distributeCards(6 - round);
+                        // add new cards to db
+                        await updateDoc(doc(db, "players", player.id), {
+                            cards: playerCards,
+                        });
+                    }
                 })
     
                 await updateDoc(doc(db, "games", userData.game.id.toString()), {
