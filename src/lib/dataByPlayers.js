@@ -42,6 +42,10 @@ export let cardsByPlayers = {
 }
 
 export let rolesByPlayers = {
+    "0": { // when loading number of players
+        "hacker": "",
+        "agent": "",
+    },
     "3": {
         "hacker": 2,
         "agent": 2,

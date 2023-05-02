@@ -6,7 +6,7 @@
     import { rolesByPlayers, cardsByPlayers } from "$lib/dataByPlayers";
     import { customAlphabet } from 'nanoid';
 
-    let playState = null, gameData, allPlayers = [], turnedCards, round, numberOfPlayers, realNumberOfPlayers;
+    let playState = null, gameData, allPlayers = [], turnedCards, round, numberOfPlayers, realNumberOfPlayers, user;
     let userData={
         "uid": null,
         "playeruid": null,
@@ -20,6 +20,12 @@
     };
     let roles = [];
     let cards = [];
+    
+    $: user = $authStore;
+    $: console.log(user.name)
+    $: if (user) {
+        setUser();
+    }
 
 
     const db = getFirestore(app);
@@ -67,39 +73,41 @@
         });
     }
 
-    authStore.subscribe(async ({ user, name }) => {
-        if (user) {
-            // setting user information
-            userData.email = user.email;
-            userData.uid = user.uid;
-            userData.name = name;
-
-            // check if user is already a player
-            let alreadyPlayer;
-            let playersWithSameId = await getDocs(query(playersColl, where("uid", "==", user.uid)))
-            playersWithSameId.forEach(doc => {
-                alreadyPlayer = doc.data()
-                userData.playeruid = doc.id;
-            })
-
-            if (alreadyPlayer) {
-                playState = "joined";
-                //! Get players game id
-                userData.game.id = alreadyPlayer.gameId;
-                
-                // set game reference
-                gameRef = doc(db, "games", userData.game.id.toString());
-                let unsubscribeGame = subscribeToGame(userData.game.id);
-            }
+    async function setUser() {
+        // setting user information
+        userData.email = user.user.email;
+        userData.uid = user.user.uid;
+        userData.name = user.name;
+        // check if user is already a player
+        let alreadyPlayer;
+        let playersWithSameId = await getDocs(query(playersColl, where("uid", "==", userData.uid)))
+        playersWithSameId.forEach(doc => {
+            alreadyPlayer = doc.data()
+            userData.playeruid = doc.id;
+        })
+        
+        if (alreadyPlayer) {
+            playState = "joined";
+            //! Get players game id
+            userData.game.id = alreadyPlayer.gameId;
+            
+            // set game reference
+            gameRef = doc(db, "games", userData.game.id.toString());
+            let unsubscribeGame = subscribeToGame(userData.game.id);
         }
-    });
 
+        let querySnapshot = await getDocs(collection(db, "players"));
+
+        playerUpdated(querySnapshot);
+
+    }
+    
     function joinGameEnter(event) {
         if (event.key === "Enter") {
             joinGame(event);
         }
     }
-
+    
     // start Game with enter
     document.addEventListener("keydown", (event) => {
         if (event.keyCode === 13 && playState == "joined") {
@@ -247,12 +255,12 @@
         let gameDb = await getDoc(gameRef);
         gameDb = gameDb.data();
 
-        let user = await getDoc(docRef);
+        let tempUser = await getDoc(docRef);
 
         gameDb.cards[cardType] -= 1
         updateDoc(gameRef, {
             cards: gameDb.cards,
-            currentPlayer: user.data().uid,
+            currentPlayer: tempUser.data().uid,
         })
 
         if (turnedCards == realNumberOfPlayers) {
@@ -300,16 +308,23 @@
 
     //subscribe to players collection to get all players
     let unsubscribePlayers = onSnapshot(playersColl, async (snapshot) => {
+        playerUpdated(snapshot);
+    })
+
+    function playerUpdated(snapshot) {
         realNumberOfPlayers = 0;
         allPlayers = []; // clear player list
         turnedCards = 0;
         snapshot.docs.forEach((player) => { 
+            console.log(userData.game.id)
             let cardsAmount = {"firewall": 0, "honeypot": 0, "system": 0}
+            console.log( player.data().gameId + " : " + userData.game.id)
             if (player.data().cards && player.data().gameId === userData.game.id) {
                 player.data().cards.forEach(card => {
                     cardsAmount[card.value] += 1;
                 })
                 realNumberOfPlayers++;
+                console.log("increase players")
             }
             allPlayers.push({ ...player.data(), id: player.id, cardsAmount})
             if (player.data().cards) {
@@ -321,7 +336,9 @@
                 });
             }
         })
-    })
+        console.table(allPlayers)
+        console.log("Number: " + realNumberOfPlayers)
+    }
 
     // change game state if game is started (even by other players)
     $: if (gameData) {
@@ -371,6 +388,7 @@
             return;
         }
     }
+
 </script>
 {#if !playState}
 
@@ -406,8 +424,8 @@
         <p>Honeypot: {gameData.startCards.honeypot - gameData.cards.honeypot}/{gameData.startCards.honeypot}</p>
         <p>Firewall: {gameData.startCards.firewall - gameData.cards.firewall}/{gameData.startCards.firewall}</p>
         <hr>
-        <p>Hacker: {rolesByPlayers[realNumberOfPlayers.toString()].hacker}</p>
-        <p>Agent: {rolesByPlayers[realNumberOfPlayers.toString()].agent}</p>
+            <p>Hacker: {rolesByPlayers[realNumberOfPlayers.toString()].hacker}</p>
+            <p>Agent: {rolesByPlayers[realNumberOfPlayers.toString()].agent}</p>
         <hr>
         <button on:click={newGame}>Start New Game</button>
     </div>
