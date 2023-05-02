@@ -370,8 +370,8 @@
                 }
             }
         })
-
-        await updateDoc(doc(db, "players", userData.playeruid), {
+        
+        await updateDoc(doc(db, "players", userData.playeruid.toString()), {
             win
         });
 
