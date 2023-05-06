@@ -336,7 +336,6 @@
                 });
             }
         })
-        console.table(allPlayers)
         console.log("Number: " + realNumberOfPlayers)
     }
 
