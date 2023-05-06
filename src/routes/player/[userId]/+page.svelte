@@ -1,9 +1,13 @@
 <script>
+    import authStore from "../../../stores/authStore";
+
+    $: user = $authStore;
+    $: console.log(user.name)
 
 </script>
 
 <div class="userInfo">
-    <p class="name">Jon <a href="/logout">Logout</a></p>
+    <p class="name">{user.name} <a href="/logout">Logout</a></p>
     <p class="level">Grandmaster</p>
     <div class="winstat">
         win/lose chart
