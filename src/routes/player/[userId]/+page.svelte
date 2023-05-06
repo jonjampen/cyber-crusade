@@ -6,8 +6,8 @@
 
 </script>
 
-<div class="userInfo">
-    <p class="name">{user.name} <a href="/logout">Logout</a></p>
+<p class="name">{user.name} <a href="/logout">Logout</a></p>
+<!-- <div class="userInfo">
     <p class="level">Grandmaster</p>
     <div class="winstat">
         win/lose chart
@@ -23,4 +23,4 @@
     <div class="lose">
         lose chart
     </div>
-</div>
+</div> -->
