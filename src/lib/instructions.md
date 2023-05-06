@@ -14,7 +14,7 @@ You are randomly given a role, either hacker or agent (you can see your role bel
 - **System:** Systems - or vulnerable systems - are the systems that are hackable. Hackers need access to all available vulnerable systems to win the game.
 
 ## Game Process
-**! Important: You are allowed to lie during the entire game!**
+**⚠️ Important: You are allowed to lie during the entire game!**
 1. You go through - player by player - and say what role you have (if you are a hacker or a agent). Remember: You may lie!
 2. You go through - player by player - and say what types of computer systems you have.
 3. The player who is marked in dark orange can now decide which computer system they want to attack. They cannot attack one of their own computer systems. The other players may talk to the active player and can persuade them.
