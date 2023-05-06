@@ -147,11 +147,11 @@
     function setByPlayers(numberOfPlayers) {
         roles = Array(rolesByPlayers[numberOfPlayers.toString()].hacker).fill("Hacker").concat(Array(rolesByPlayers[numberOfPlayers.toString()].agent).fill("Agent"));
 
-        let firewall = [], system = [], honeypot = [];
+        let firewall = [], target = [], honeypot = [];
         firewall = Array(cardsByPlayers[numberOfPlayers.toString()].firewall).fill("firewall")
-        system = Array(cardsByPlayers[numberOfPlayers.toString()].system).fill("system")
+        target = Array(cardsByPlayers[numberOfPlayers.toString()].target).fill("target")
         honeypot = Array(cardsByPlayers[numberOfPlayers.toString()].honeypot).fill("honeypot")
-        cards = firewall.concat(system).concat(honeypot);
+        cards = firewall.concat(target).concat(honeypot);
     }
 
     async function startGame() {
@@ -185,12 +185,12 @@
             round: 1,
             startCards: {
                 firewall: cardsByPlayers[realNumberOfPlayers.toString()].firewall,
-                system: cardsByPlayers[realNumberOfPlayers.toString()].system,
+                target: cardsByPlayers[realNumberOfPlayers.toString()].target,
                 honeypot: cardsByPlayers[realNumberOfPlayers.toString()].honeypot,
             },
             cards: {
                 firewall: cardsByPlayers[realNumberOfPlayers.toString()].firewall,
-                system: cardsByPlayers[realNumberOfPlayers.toString()].system,
+                target: cardsByPlayers[realNumberOfPlayers.toString()].target,
                 honeypot: cardsByPlayers[realNumberOfPlayers.toString()].honeypot,
             },
             currentPlayer: userData.uid,
@@ -281,7 +281,7 @@
             let dbCards = gameDb.data().cards;
             round = gameDb.data().round + 1;
             if (round < 5) {
-                cards = Array(dbCards.firewall).fill("firewall").concat(Array(dbCards.honeypot).fill("honeypot").concat(Array(dbCards.system).fill("system")))
+                cards = Array(dbCards.firewall).fill("firewall").concat(Array(dbCards.honeypot).fill("honeypot").concat(Array(dbCards.target).fill("target")))
                 console.log("New Round:" + round);
     
                 allPlayers.forEach(async player => {
@@ -317,7 +317,7 @@
         turnedCards = 0;
         snapshot.docs.forEach((player) => { 
             console.log(userData.game.id)
-            let cardsAmount = {"firewall": 0, "honeypot": 0, "system": 0}
+            let cardsAmount = {"firewall": 0, "honeypot": 0, "target": 0}
             console.log( player.data().gameId + " : " + userData.game.id)
             if (player.data().cards && player.data().gameId === userData.game.id) {
                 player.data().cards.forEach(card => {
@@ -349,7 +349,7 @@
                 playState = "over";
                 gameOver("Agent");
             }
-            else if (gameData.cards.system == 0) {
+            else if (gameData.cards.target == 0) {
                 playState = "over"
                 gameOver("Hacker");
             }
@@ -419,7 +419,7 @@
     <div class="sidenav">
         <p>Round: {gameData.round}/4</p>
         <hr>
-        <p>System: {gameData.startCards.system - gameData.cards.system}/{gameData.startCards.system}</p>
+        <p>Target: {gameData.startCards.target - gameData.cards.target}/{gameData.startCards.target}</p>
         <p>Honeypot: {gameData.startCards.honeypot - gameData.cards.honeypot}/{gameData.startCards.honeypot}</p>
         <p>Firewall: {gameData.startCards.firewall - gameData.cards.firewall}/{gameData.startCards.firewall}</p>
         <hr>
@@ -437,13 +437,13 @@
                         {player.name}
 
                         {#if player.uid == userData.uid || playState == "over"}
-                            (<i title="{player.role == "Agent" ? 'Agents try to direct hackers to honeypots.' : 'Hackers try to find vulnerable systems.'}">{player.role}</i>)
+                            (<i title="{player.role == "Agent" ? 'Agents try to direct hackers to honeypots.' : 'Hackers try to find targets.'}">{player.role}</i>)
                         {/if}
                     </h3>
                     {#if player.uid == userData.uid}
                         Firewall: {player.cardsAmount.firewall} <br>
                         Honeypot: {player.cardsAmount.honeypot} <br>
-                        System: {player.cardsAmount.system}
+                        Target: {player.cardsAmount.target}
                     {/if}
                 </div>
                 <div class="cards">
