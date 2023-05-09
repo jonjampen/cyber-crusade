@@ -6,7 +6,7 @@
     import { rolesByPlayers, cardsByPlayers } from "$lib/dataByPlayers";
     import { customAlphabet } from 'nanoid';
 
-    let playState = null, gameData, allPlayers = [], turnedCards, round, numberOfPlayers, realNumberOfPlayers, user;
+    let playState = null, gameData, allPlayers = [], turnedCards, round, numberOfPlayers, realNumberOfPlayers, user, gameOver=false;
     let userData={
         "uid": null,
         "playeruid": null,
@@ -300,8 +300,10 @@
                 })
             }
             else {
-                console.log("Game ended")
-                gameOver("Agent");
+                if (!gameOver) {
+                    console.log("Game ended")
+                    setGameOver("Agent");
+                }
             }
         }
     }
@@ -347,16 +349,17 @@
         if (gameData.cards){
             if (gameData.cards.honeypot == 0) {
                 playState = "over";
-                gameOver("Agent");
+                setGameOver("Agent");
             }
             else if (gameData.cards.target == 0) {
                 playState = "over"
-                gameOver("Hacker");
+                setGameOver("Hacker");
             }
         }
     }
 
-    async function gameOver(winner) {
+    async function setGameOver(winner) {
+        gameOver = true;
         let win;
         allPlayers.forEach((player) => {
             if (player.id == userData.playeruid) {
