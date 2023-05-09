@@ -6,7 +6,7 @@ The hackers have the goal to get full access to the system within 4 rounds of pl
 The agents try to prevent that by either stalling time or by decoying to hack into a honeypot.
 
 ## Game Preparation
-You are randomly given a role, either hacker (👨‍💻) or agent(🕵️) (you can see your role next to your name when playing a game). Each member gets 5 computer systems which they are responsible for (below your name you can see what types of computer systems you have).
+You are randomly given a role, either hacker (👨‍💻) or agent (🕵️) (you can see your role next to your name when playing a game). Each member gets 5 computer systems which they are responsible for (below your name you can see what types of computer systems you have).
 
 ### Types of computer systems
 - **Honeypot:** Honeypots are bad for hackers since they alert the security system. If two (or three, depending on how many players are playing) honeypots are attacked, the hackers loose and the agents win.
@@ -33,7 +33,7 @@ There are three possible outcomes:
 <hr style="border: 1px solid var(--primary)">
 
 # About This Project
-## Contribute / Feedback
+## Feedback
 If you find a bug or have a feature request, please create an issue on my Github repository: <a href="https://github.com/jonjampen/cyber-crusade/issues" target="_blank">Submit an issue</a>
 
 ## Project
