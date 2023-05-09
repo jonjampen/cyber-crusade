@@ -426,8 +426,8 @@
         <p>Honeypot: {gameData.startCards.honeypot - gameData.cards.honeypot}/{gameData.startCards.honeypot}</p>
         <p>Firewall: {gameData.startCards.firewall - gameData.cards.firewall}/{gameData.startCards.firewall}</p>
         <hr>
-            <p>Hacker: {rolesByPlayers[realNumberOfPlayers.toString()].hacker}</p>
-            <p>Agent: {rolesByPlayers[realNumberOfPlayers.toString()].agent}</p>
+            <p>Hacker 👨‍💻: {rolesByPlayers[realNumberOfPlayers.toString()].hacker}</p>
+            <p>Agent 🕵️: {rolesByPlayers[realNumberOfPlayers.toString()].agent}</p>
         <hr>
         <button on:click={newGame}>Start New Game</button>
     </div>
@@ -440,7 +440,7 @@
                         {player.name}
 
                         {#if player.uid == userData.uid || playState == "over"}
-                            (<i title="{player.role == "Agent" ? 'Agents try to direct hackers to honeypots.' : 'Hackers try to find targets.'}">{player.role}</i>)
+                            <span title="{player.role == "Agent" ? 'Agent: try to direct hackers to honeypots.' : 'Hacker: try to find targets.'}">{player.role == "Agent" ? '🕵️' : '👨‍💻'}</span>
                         {/if}
                     </h3>
                     {#if player.uid == userData.uid}

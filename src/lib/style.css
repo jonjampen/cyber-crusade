@@ -83,7 +83,9 @@ input:focus {
 a, span {
     color: var(--primary)
 }
-
+span {
+    font-size: x-large;
+}
 .playing {
     display: flex;
     flex-direction: row;
