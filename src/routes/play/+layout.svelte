@@ -33,27 +33,20 @@
 
         // keep updating game
         let gameData;
-        let unsubscribeGame = onSnapshot(
-            doc(firebaseDb, "games", gameId.toString()),
-            (doc) => {
-                gameData = doc.data();
-                console.log(gameData);
-            }
-        );
-
-        $gameStore.id = gameId.toString();
+        if (gameId) {
+            let unsubscribeGame = onSnapshot(
+                doc(firebaseDb, "games", gameId.toString()),
+                (doc) => {
+                    gameData = doc.data();
+                    console.log(gameData);
+                    console.log("Hey");
+                    console.log($gameStore);
+                    $gameStore.id = gameId.toString();
+                    // $gameStore = {}
+                }
+            );
+        }
     });
-
-    // get game info
-    // let game;
-    // let gamesColl = collection(firebaseDb, "games");
-    // let games = await getDoc(doc(gamesColl, gameId));
-    // games.forEach((doc) => {
-    //     game = doc.data();
-    // });
-    // console.log(game);
-
-    // gameStore.set
 </script>
 
 {$gameStore.id}

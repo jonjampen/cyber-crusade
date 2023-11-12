@@ -3,6 +3,7 @@ import { addDoc, collection, onSnapshot, getDocs, where, query, updateDoc, doc, 
 import { firebaseDb } from "$lib/firebase.js";
 import { gameStore } from '$lib/gameStore';
 import { authUser } from './authStore';
+import { goto } from '$app/navigation';
 
 const playersColl = collection(firebaseDb, "players")
 
@@ -34,7 +35,6 @@ export async function createGame() {
 }
 
 export async function joinGame(gameId) {
-    console.log("join", gameId);
     gameId = parseInt(gameId);
 
     let user;
@@ -60,6 +60,6 @@ export async function joinGame(gameId) {
         let gameRef = doc(firebaseDb, "games", game.id.toString());
         game.state = "joined";
         gameStore.set(game)
-        return;
+        window.location.href = `/play/${game.id.toString()}`
     }
 }
