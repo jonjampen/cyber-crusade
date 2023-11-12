@@ -1,15 +1,15 @@
 <script>
-import { getAuth, signOut } from "firebase/auth";
-import { app } from "../initializeFirebase";
+    import { firebaseAuth } from "$lib/firebase";
+    import { signOut } from "firebase/auth";
+    import { goto } from "$app/navigation";
 
-const auth = getAuth(app);
-
-signOut(auth).then(() => {
-  // Sign-out successful.
-  console.log("logged out")
-  window.location.href="/login";
-}).catch((error) => {
-    console.log("not logged out")
-  // An error happened.
-});    
+    signOut(firebaseAuth)
+        .then(() => {
+            // Sign-out successful.
+            goto("/login");
+        })
+        .catch((error) => {
+            console.log("not logged out");
+            // An error happened.
+        });
 </script>
