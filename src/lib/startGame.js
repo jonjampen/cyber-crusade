@@ -61,6 +61,5 @@ export async function joinGame(gameId) {
         game.state = "joined";
         gameStore.set(game)
         return;
-        let unsubscribeGame = subscribeToGame(userData.game.id);
     }
 }

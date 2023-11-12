@@ -5,6 +5,7 @@ import { browser } from "$app/environment";
 
 export async function load({ url }) {
     if (browser) {
+        // keep updating auth
         onAuthStateChanged(firebaseAuth, (user) => {
             if (user) {
                 authUser.set({

@@ -28,6 +28,7 @@
     <ul>
         <li><a href="/play/{$gameStore.id}">{$gameStore.id}</a></li>
     </ul>
+    <br />
 {/if}
 
 <h3>Join a Game</h3>
@@ -44,6 +45,7 @@
     </label>
     <button type="submit">Join Game</button>
 </form>
+<br />
 
 <h3>Create New Game</h3>
 <button on:click={createGame}>Create Game</button>
