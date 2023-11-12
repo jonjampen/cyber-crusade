@@ -41,6 +41,11 @@
                     console.log(gameData);
                     console.log("Hey");
                     console.log($gameStore);
+                    $gameStore = {
+                        id: gameId.toString(),
+                        round: 0,
+                        state: gameData.gameState,
+                    };
                     $gameStore.id = gameId.toString();
                     // $gameStore = {}
                 }

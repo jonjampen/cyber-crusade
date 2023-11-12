@@ -45,21 +45,27 @@ export async function joinGame(gameId) {
 
     if (user.uid) {
         // cancel if already a player
-        if (game.id != "") return;
-
-        game.id = gameId;
+        if (game.id != "") {
+            alert("already in one game")
+            return
+        }
 
         let data = {
             uid: user.uid,
             name: user.name,
-            gameId: game.id,
+            gameId: gameId,
         };
         await addDoc(playersColl, data);
 
         // set game reference
-        let gameRef = doc(firebaseDb, "games", game.id.toString());
-        game.state = "joined";
-        gameStore.set(game)
+        console.log("hey")
+        console.log(game)
+        gameStore.set({
+            id: gameId,
+            round: 0,
+            state: "",
+        })
+        console.log(game)
         window.location.href = `/play/${game.id.toString()}`
     }
 }
