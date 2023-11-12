@@ -5,11 +5,9 @@
 
     signOut(firebaseAuth)
         .then(() => {
-            // Sign-out successful.
             goto("/login");
         })
         .catch((error) => {
-            console.log("not logged out");
-            // An error happened.
+            console.error(error);
         });
 </script>
