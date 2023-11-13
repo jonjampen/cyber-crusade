@@ -6,6 +6,7 @@ import { playersStore } from '$lib/playersStore';
 import { authUser } from './authStore';
 import { goto } from '$app/navigation';
 import { rolesByPlayers } from '$lib/rolesByPlayers';
+import { cardsByPlayers } from '$lib/cardsByPlayers';
 
 const playersColl = collection(firebaseDb, "players")
 
@@ -87,7 +88,7 @@ export async function startGame() {
         }
     })
     console.log("NOP: " + numberOfPlayers)
-    await distributeRoles(numberOfPlayers);
+    await distribute(numberOfPlayers);
     return
 
     // distribute roles
@@ -125,36 +126,50 @@ export async function startGame() {
     playState = "playing";
 }
 
-function shuffleRoles(roles) {
-    for (let i = roles.length - 1; i > 0; i--) {
+function shuffle(array) {
+    for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
-        [roles[i], roles[j]] = [roles[j], roles[i]];
+        [array[i], array[j]] = [array[j], array[i]];
     }
-    return roles
+    return array
+}
+
+function flatten(object) {
+    let array = [];
+    Object.entries(object).forEach(([key, count]) => {
+        for (let i = 0; i < count; i++) {
+            array.push(key);
+        }
+    });
+    return array
 }
 
 
-async function distributeRoles(nop) {
-    let roles = [];
+async function distribute(nop) {
+    let roles = flatten(rolesByPlayers[nop.toString()]);
+    roles = shuffle(roles);
 
-    // set roles based on players
-    Object.entries(rolesByPlayers[nop.toString()]).forEach(([role, count]) => {
-        for (let i = 0; i < count; i++) {
-            roles.push(role);
-        }
-    });
+    let cards = flatten(cardsByPlayers[nop.toString()]);
+    cards = shuffle(cards);
 
-    // shuffle roles
-    roles = shuffleRoles(roles);
-
-    // distribute roles
+    // distribute
     await players.forEach(async (player) => {
         if (player.gameId.toString() === game.id) {
+            let playerCards = [];
+
+            for (let i = 0; i < 5; i++) {
+                playerCards.push({
+                    value: cards[0],
+                    turned: false,
+                })
+                cards.shift();
+            }
+
             await updateDoc(doc(firebaseDb, "players", player.id), {
                 role: roles[0],
+                cards: playerCards,
             });
             roles.shift();
         }
     })
-    console.log(players);
 }
