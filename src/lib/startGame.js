@@ -74,7 +74,7 @@ export async function joinGame(gameId) {
 export async function startGame() {
     // start calc
 
-    let numberOfPlayers = 0;
+    let numberOfPlayers = 0; // TODO: players.length()
 
     players.forEach((player) => {
         if (player.gameId.toString() === game.id) {

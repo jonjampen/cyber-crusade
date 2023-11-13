@@ -14,6 +14,7 @@
     import { authUser } from "$lib/stores/authStore";
     import { playersStore } from "$lib/stores/playersStore";
     import { countOccurrences } from "$lib/gameplay/information";
+    import { flipCard } from "$lib/gameplay/gameplay";
 
     const playersColl = collection(firebaseDb, "players");
 
@@ -61,6 +62,8 @@
             unsubscribePlayers();
         };
     });
+
+    console.log($gameStore);
 </script>
 
 {#each $playersStore as player}
@@ -151,16 +154,16 @@
                             {#each player.cards as card, i}
                                 <img
                                     class="{$gameStore.currentPlayer ==
-                                        $playersStore.uid &&
-                                    player.uid != $playersStore.uid &&
+                                        $authUser.uid &&
+                                    player.uid != $authUser.uid &&
                                     card.turned != true
                                         ? 'clickable'
                                         : ''} card"
                                     playerid={player.id}
                                     cardindex={i}
                                     on:click={$gameStore.currentPlayer ==
-                                        $playersStore.uid &&
-                                    player.uid != $playersStore.uid &&
+                                        $authUser.uid &&
+                                    player.uid != $authUser.uid &&
                                     card.turned != true
                                         ? flipCard
                                         : ""}
