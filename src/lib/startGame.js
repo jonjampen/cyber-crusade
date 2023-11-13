@@ -2,16 +2,21 @@ import { customAlphabet } from 'nanoid';
 import { addDoc, collection, onSnapshot, getDocs, where, query, updateDoc, doc, setDoc, getDoc, deleteDoc } from "firebase/firestore";
 import { firebaseDb } from "$lib/firebase.js";
 import { gameStore } from '$lib/gameStore';
+import { playersStore } from '$lib/playersStore';
 import { authUser } from './authStore';
 import { goto } from '$app/navigation';
+import { rolesByPlayers } from '$lib/rolesByPlayers';
 
 const playersColl = collection(firebaseDb, "players")
 
 let user;
-authUser.subscribe(val => user = val)
+authUser.subscribe(val => user = val);
 
 let game;
-gameStore.subscribe(val => game = val)
+gameStore.subscribe(val => game = val);
+
+let players;
+playersStore.subscribe(val => players = val);
 
 async function setGameId() {
     const nanoid = customAlphabet("123456789", 6);
@@ -74,20 +79,20 @@ export async function startGame() {
         gameState: "calculating"
     });
 
-    numberOfPlayers = 0;
-    return
+    let numberOfPlayers = 0;
 
-    allPlayers.forEach((player) => {
-        if (player.gameId === userData.game.id) {
+    players.forEach((player) => {
+        if (player.gameId.toString() === game.id) {
             numberOfPlayers++;
         }
     })
     console.log("NOP: " + numberOfPlayers)
+    await distributeRoles(numberOfPlayers);
+    return
 
     // distribute roles
-    setByPlayers(numberOfPlayers);
 
-    allPlayers.forEach(async player => {
+    players.forEach(async player => {
         if (player.gameId === userData.game.id) {
             let playerRole = distributeRoles();
             let playerCards = distributeCards(5);
@@ -118,4 +123,38 @@ export async function startGame() {
     })
 
     playState = "playing";
+}
+
+function shuffleRoles(roles) {
+    for (let i = roles.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [roles[i], roles[j]] = [roles[j], roles[i]];
+    }
+    return roles
+}
+
+
+async function distributeRoles(nop) {
+    let roles = [];
+
+    // set roles based on players
+    Object.entries(rolesByPlayers[nop.toString()]).forEach(([role, count]) => {
+        for (let i = 0; i < count; i++) {
+            roles.push(role);
+        }
+    });
+
+    // shuffle roles
+    roles = shuffleRoles(roles);
+
+    // distribute roles
+    await players.forEach(async (player) => {
+        if (player.gameId.toString() === game.id) {
+            await updateDoc(doc(firebaseDb, "players", player.id), {
+                role: roles[0],
+            });
+            roles.shift();
+        }
+    })
+    console.log(players);
 }

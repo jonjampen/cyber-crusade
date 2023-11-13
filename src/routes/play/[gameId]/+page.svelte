@@ -20,7 +20,6 @@
     import { playersStore } from "$lib/playersStore";
 
     export let data;
-    let allPlayers = [];
     const playersColl = collection(firebaseDb, "players");
 
     onMount(async () => {
@@ -29,7 +28,6 @@
         let gameId = "";
         authUser.subscribe((val) => (user = val));
 
-        let playersColl = collection(firebaseDb, "players");
         let users = await getDocs(
             query(playersColl, where("uid", "==", user.uid))
         );
@@ -56,21 +54,41 @@
         }
 
         // update players infos
-        let unsubscribePlayers = onSnapshot(playersColl, async (snapshot) => {
-            snapshot.docs.forEach((player) => {
-                if (player.data().gameId.toString() === $gameStore.id) {
-                    allPlayers.push({
-                        ...player.data(),
-                        id: player.id,
+        if (gameId) {
+            let unsubscribePlayers = onSnapshot(
+                playersColl,
+                async (snapshot) => {
+                    let updatedPlayers = [];
+                    snapshot.docs.forEach((player) => {
+                        if (player.data().gameId.toString() === $gameStore.id) {
+                            updatedPlayers.push({
+                                ...player.data(),
+                                id: player.id,
+                            });
+                        }
                     });
+                    $playersStore = updatedPlayers;
                 }
-            });
-            $playersStore = allPlayers;
-        });
+            );
+        }
+        return () => {
+            unsubscribeGame();
+            unsubscribePlayers();
+        };
     });
 </script>
 
 {data.gameId}
+{#each $playersStore as player}
+    <p>
+        {player.name}
+        {player.id}
+        {player.gameId}
+        {#if player.role}
+            {player.role}
+        {/if}
+    </p>
+{/each}
 {#if $gameStore.state == "created"}
     <div class="waiting">
         <h1>Waiting Room</h1>
