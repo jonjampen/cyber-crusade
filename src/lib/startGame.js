@@ -64,12 +64,9 @@ export async function joinGame(gameId) {
         await addDoc(playersColl, data);
 
         // set game reference
-        console.log("hey")
-        // gameStore.set({
-        //     id: gameId,
-        //     round: 0,
-        //     state: "",
-        // })
+        gameStore.set({
+            id: gameId,
+        })
         window.location.href = `/play/${game.id.toString()}`
     }
 }
