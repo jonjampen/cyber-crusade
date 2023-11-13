@@ -1,15 +1,6 @@
 import { writable } from 'svelte/store';
-
-interface Game {
-    id: string;
-    round: number;
-    state: string;
-}
-
-const gameStore = writable<Game>({
+const gameStore = writable({
     id: "",
-    round: 0,
-    state: "",
 });
 
 export { gameStore };

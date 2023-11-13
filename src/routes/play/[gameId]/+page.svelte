@@ -42,13 +42,13 @@
                 doc(firebaseDb, "games", gameId.toString()),
                 (doc) => {
                     gameData = doc.data();
-                    $gameStore = {
-                        id: gameId.toString(),
-                        round: 0,
-                        state: gameData.gameState,
-                    };
-                    $gameStore.id = gameId.toString();
-                    // $gameStore = {}
+                    // $gameStore = {
+                    //     id: gameId.toString(),
+                    //     round: 0,
+                    //     state: gameData.gameState,
+                    // };
+                    // $gameStore.id = gameId.toString();
+                    $gameStore = { ...doc.data(), id: doc.id };
                 }
             );
         }
@@ -76,9 +76,44 @@
             unsubscribePlayers();
         };
     });
+
+    function countOccurrences() {
+        let cards = [];
+        $playersStore.forEach((player) => {
+            if (player.uid === $authUser.uid) {
+                cards = player.cards;
+            }
+        });
+        // Initialize counters
+        let targetCount = 0;
+        let firewallCount = 0;
+        let honeypotCount = 0;
+
+        // Iterate through the cards array
+        cards.forEach((card) => {
+            switch (card.value) {
+                case "target":
+                    targetCount++;
+                    break;
+                case "firewall":
+                    firewallCount++;
+                    break;
+                case "honeypot":
+                    honeypotCount++;
+                    break;
+            }
+        });
+
+        return {
+            target: targetCount,
+            firewall: firewallCount,
+            honeypot: honeypotCount,
+        };
+    }
+
+    $: console.log($playersStore);
 </script>
 
-{data.gameId}
 {#each $playersStore as player}
     <p>
         {player.name}
@@ -89,7 +124,7 @@
         {/if}
     </p>
 {/each}
-{#if $gameStore.state == "created"}
+{#if $gameStore.gameState == "created"}
     <div class="waiting">
         <h1>Waiting Room</h1>
         <p>
@@ -103,5 +138,92 @@
             <p>{player.name}</p>
         {/each}
         <button on:click={startGame}>Start Game</button>
+    </div>
+{:else if $gameStore.gameState == "playing"}
+    <div class="playing">
+        <div class="sidenav">
+            <p>Round: {$gameStore.round}/4</p>
+            <hr />
+            <p>
+                Target: {$gameStore.startCards.target -
+                    $gameStore.cards.target}/{$gameStore.startCards.target}
+            </p>
+            <p>
+                Honeypot: {$gameStore.startCards.honeypot -
+                    $gameStore.cards.honeypot}/{$gameStore.startCards.honeypot}
+            </p>
+            <p>
+                Firewall: {$gameStore.startCards.firewall -
+                    $gameStore.cards.firewall}/{$gameStore.startCards.firewall}
+            </p>
+            <hr />
+            <p>
+                Hacker 👨‍💻: {$gameStore.startRoles.hacker}
+            </p>
+            <p>
+                Agent 🕵️: {$gameStore.startRoles.agent}
+            </p>
+            <hr />
+            <button>Start New Game</button>
+        </div>
+
+        <div class="players">
+            {#each $playersStore as player}
+                {#if player.gameId.toString() === $gameStore.id}
+                    <div
+                        class="player {player.uid == $authUser.uid
+                            ? 'thisPlayer'
+                            : ''} {$gameStore.currentPlayer == player.uid
+                            ? 'activePlayer'
+                            : ''}"
+                    >
+                        <div class="player-info">
+                            <h3>
+                                {player.name}
+
+                                {#if player.uid == $authUser.uid || $gameStore.gameState == "over"}
+                                    <span
+                                        title={player.role == "Agent"
+                                            ? "Agent: try to direct hackers to honeypots."
+                                            : "Hacker: try to find targets."}
+                                        >{player.role == "Agent"
+                                            ? "🕵️"
+                                            : "👨‍💻"}</span
+                                    >
+                                {/if}
+                            </h3>
+                            {#if player.uid == $authUser.uid}
+                                Firewall: {countOccurrences().firewall} <br />
+                                Honeypot: {countOccurrences().honeypot} <br />
+                                Target: {countOccurrences().target}
+                            {/if}
+                        </div>
+                        <div class="cards">
+                            {#each player.cards as card, i}
+                                <img
+                                    class="{$gameStore.currentPlayer ==
+                                        $playersStore.uid &&
+                                    player.uid != $playersStore.uid &&
+                                    card.turned != true
+                                        ? 'clickable'
+                                        : ''} card"
+                                    playerid={player.id}
+                                    cardindex={i}
+                                    on:click={$gameStore.currentPlayer ==
+                                        $playersStore.uid &&
+                                    player.uid != $playersStore.uid &&
+                                    card.turned != true
+                                        ? flipCard
+                                        : ""}
+                                    src="/computers/{card.turned == true
+                                        ? card.value
+                                        : 'flipped'}.svg"
+                                />
+                            {/each}
+                        </div>
+                    </div>
+                {/if}
+            {/each}
+        </div>
     </div>
 {/if}

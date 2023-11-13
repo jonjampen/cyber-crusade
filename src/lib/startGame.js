@@ -65,20 +65,17 @@ export async function joinGame(gameId) {
 
         // set game reference
         console.log("hey")
-        gameStore.set({
-            id: gameId,
-            round: 0,
-            state: "",
-        })
+        // gameStore.set({
+        //     id: gameId,
+        //     round: 0,
+        //     state: "",
+        // })
         window.location.href = `/play/${game.id.toString()}`
     }
 }
 
 export async function startGame() {
     // start calc
-    await updateDoc(doc(firebaseDb, "games", game.id), {
-        gameState: "calculating"
-    });
 
     let numberOfPlayers = 0;
 
@@ -87,8 +84,19 @@ export async function startGame() {
             numberOfPlayers++;
         }
     })
-    console.log("NOP: " + numberOfPlayers)
+
+    await updateDoc(doc(firebaseDb, "games", game.id), {
+        gameState: "calculating",
+        round: 0,
+        startCards: cardsByPlayers[numberOfPlayers.toString()],
+        cards: cardsByPlayers[numberOfPlayers.toString()],
+        startRoles: rolesByPlayers[numberOfPlayers.toString()],
+    });
+
     await distribute(numberOfPlayers);
+    await updateDoc(doc(firebaseDb, "games", game.id), {
+        gameState: "playing",
+    });
     return
 
     // distribute roles
