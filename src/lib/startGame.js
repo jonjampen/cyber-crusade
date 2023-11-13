@@ -7,6 +7,12 @@ import { goto } from '$app/navigation';
 
 const playersColl = collection(firebaseDb, "players")
 
+let user;
+authUser.subscribe(val => user = val)
+
+let game;
+gameStore.subscribe(val => game = val)
+
 async function setGameId() {
     const nanoid = customAlphabet("123456789", 6);
     let tempGameId = nanoid();
@@ -37,12 +43,6 @@ export async function createGame() {
 export async function joinGame(gameId) {
     gameId = parseInt(gameId);
 
-    let user;
-    authUser.subscribe(val => user = val)
-
-    let game;
-    gameStore.subscribe(val => game = val)
-
     if (user.uid) {
         // cancel if already a player
         if (game.id != "") {
@@ -59,13 +59,63 @@ export async function joinGame(gameId) {
 
         // set game reference
         console.log("hey")
-        console.log(game)
         gameStore.set({
             id: gameId,
             round: 0,
             state: "",
         })
-        console.log(game)
         window.location.href = `/play/${game.id.toString()}`
     }
+}
+
+export async function startGame() {
+    // start calc
+    await updateDoc(doc(firebaseDb, "games", game.id), {
+        gameState: "calculating"
+    });
+
+    numberOfPlayers = 0;
+    return
+
+    allPlayers.forEach((player) => {
+        if (player.gameId === userData.game.id) {
+            numberOfPlayers++;
+        }
+    })
+    console.log("NOP: " + numberOfPlayers)
+
+    // distribute roles
+    setByPlayers(numberOfPlayers);
+
+    allPlayers.forEach(async player => {
+        if (player.gameId === userData.game.id) {
+            let playerRole = distributeRoles();
+            let playerCards = distributeCards(5);
+
+            // add role & cards to db
+            await updateDoc(doc(db, "players", player.id), {
+                role: playerRole,
+                cards: playerCards,
+            });
+        }
+    });
+
+    // set gameState in db to playing
+    await setDoc(gameRef, {
+        gameState: "playing",
+        round: 1,
+        startCards: {
+            firewall: cardsByPlayers[numberOfPlayers.toString()].firewall,
+            target: cardsByPlayers[numberOfPlayers.toString()].target,
+            honeypot: cardsByPlayers[numberOfPlayers.toString()].honeypot,
+        },
+        cards: {
+            firewall: cardsByPlayers[numberOfPlayers.toString()].firewall,
+            target: cardsByPlayers[numberOfPlayers.toString()].target,
+            honeypot: cardsByPlayers[numberOfPlayers.toString()].honeypot,
+        },
+        currentPlayer: userData.uid,
+    })
+
+    playState = "playing";
 }
