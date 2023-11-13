@@ -13,6 +13,7 @@
     import { startGame } from "$lib/startGame";
     import { authUser } from "$lib/stores/authStore";
     import { playersStore } from "$lib/stores/playersStore";
+    import { countOccurrences } from "$lib/gameplay/information";
 
     const playersColl = collection(firebaseDb, "players");
 
@@ -60,39 +61,6 @@
             unsubscribePlayers();
         };
     });
-
-    function countOccurrences() {
-        let cards = [];
-        $playersStore.forEach((player) => {
-            if (player.uid === $authUser.uid) {
-                cards = player.cards;
-            }
-        });
-        let targetCount = 0;
-        let firewallCount = 0;
-        let honeypotCount = 0;
-
-        // Iterate through the cards array
-        cards.forEach((card) => {
-            switch (card.value) {
-                case "target":
-                    targetCount++;
-                    break;
-                case "firewall":
-                    firewallCount++;
-                    break;
-                case "honeypot":
-                    honeypotCount++;
-                    break;
-            }
-        });
-
-        return {
-            target: targetCount,
-            firewall: firewallCount,
-            honeypot: honeypotCount,
-        };
-    }
 </script>
 
 {#each $playersStore as player}
