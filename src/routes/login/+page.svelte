@@ -1,7 +1,7 @@
 <script>
     import { signInWithEmailAndPassword } from "firebase/auth";
     import { firebaseAuth } from "$lib/firebase";
-    import { authUser } from "$lib/authStore";
+    import { authUser } from "$lib/stores/authStore";
 
     let email,
         password,

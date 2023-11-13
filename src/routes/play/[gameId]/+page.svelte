@@ -1,59 +1,42 @@
 <script>
     import { firebaseDb } from "$lib/firebase.js";
-    import { gameStore } from "$lib/gameStore";
+    import { gameStore } from "$lib/stores/gameStore";
     import {
-        addDoc,
         collection,
         onSnapshot,
         getDocs,
         where,
         query,
-        updateDoc,
         doc,
-        setDoc,
-        getDoc,
-        deleteDoc,
     } from "firebase/firestore";
     import { onMount } from "svelte";
     import { startGame } from "$lib/startGame";
-    import { authUser } from "$lib/authStore";
-    import { playersStore } from "$lib/playersStore";
+    import { authUser } from "$lib/stores/authStore";
+    import { playersStore } from "$lib/stores/playersStore";
 
-    export let data;
     const playersColl = collection(firebaseDb, "players");
 
     onMount(async () => {
-        // get current game: get player + gameid by userid -> get game by id
-        let user;
+        // get current game
         let gameId = "";
-        authUser.subscribe((val) => (user = val));
-
         let users = await getDocs(
-            query(playersColl, where("uid", "==", user.uid))
+            query(playersColl, where("uid", "==", $authUser.uid))
         );
         users.forEach((doc) => {
             gameId = doc.data().gameId;
         });
 
         // keep updating game
-        let gameData;
         if (gameId) {
             let unsubscribeGame = onSnapshot(
                 doc(firebaseDb, "games", gameId.toString()),
                 (doc) => {
-                    gameData = doc.data();
-                    // $gameStore = {
-                    //     id: gameId.toString(),
-                    //     round: 0,
-                    //     state: gameData.gameState,
-                    // };
-                    // $gameStore.id = gameId.toString();
                     $gameStore = { ...doc.data(), id: doc.id };
                 }
             );
         }
 
-        // update players infos
+        // keep updating players infos
         if (gameId) {
             let unsubscribePlayers = onSnapshot(
                 playersColl,
@@ -71,6 +54,7 @@
                 }
             );
         }
+
         return () => {
             unsubscribeGame();
             unsubscribePlayers();
@@ -84,7 +68,6 @@
                 cards = player.cards;
             }
         });
-        // Initialize counters
         let targetCount = 0;
         let firewallCount = 0;
         let honeypotCount = 0;
@@ -110,8 +93,6 @@
             honeypot: honeypotCount,
         };
     }
-
-    $: console.log($playersStore);
 </script>
 
 {#each $playersStore as player}

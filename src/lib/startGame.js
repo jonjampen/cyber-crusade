@@ -1,12 +1,12 @@
 import { customAlphabet } from 'nanoid';
 import { addDoc, collection, onSnapshot, getDocs, where, query, updateDoc, doc, setDoc, getDoc, deleteDoc } from "firebase/firestore";
 import { firebaseDb } from "$lib/firebase.js";
-import { gameStore } from '$lib/gameStore';
-import { playersStore } from '$lib/playersStore';
-import { authUser } from './authStore';
+import { gameStore } from '$lib/stores/gameStore';
+import { playersStore } from '$lib/stores/playersStore';
+import { authUser } from '$lib/stores/authStore';
 import { goto } from '$app/navigation';
-import { rolesByPlayers } from '$lib/rolesByPlayers';
-import { cardsByPlayers } from '$lib/cardsByPlayers';
+import { rolesByPlayers } from '$lib/gameSetup/rolesByPlayers';
+import { cardsByPlayers } from '$lib/gameSetup/cardsByPlayers';
 
 const playersColl = collection(firebaseDb, "players")
 

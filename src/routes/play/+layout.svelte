@@ -1,5 +1,5 @@
 <script>
-    import { gameStore } from "$lib/gameStore";
+    import { gameStore } from "$lib/stores/gameStore";
 </script>
 
 {$gameStore.id}

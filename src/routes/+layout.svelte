@@ -1,7 +1,7 @@
 <script>
-    import "$lib/style.css";
+    import "../style.css";
     import { page } from "$app/stores";
-    import { authUser } from "$lib/authStore";
+    import { authUser } from "$lib/stores/authStore";
 </script>
 
 <nav>

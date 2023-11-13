@@ -1,5 +1,5 @@
 <script>
-    import { authUser } from "$lib/authStore";
+    import { authUser } from "$lib/stores/authStore";
     import { createGame, joinGame } from "$lib/startGame";
     import {
         getFirestore,
@@ -16,7 +16,7 @@
         deleteDoc,
     } from "firebase/firestore";
     import { firebaseDb } from "$lib/firebase.js";
-    import { gameStore } from "$lib/gameStore";
+    import { gameStore } from "$lib/stores/gameStore";
 
     let gameId = "";
 </script>
