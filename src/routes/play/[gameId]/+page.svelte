@@ -66,11 +66,14 @@
     console.log($gameStore);
 </script>
 
+{$gameStore.gameState != "roundEnded"}
+{$gameStore.gameState}
+{$gameStore.currentPlayer}
 {#each $playersStore as player}
     <p>
         {player.name}
         {player.id}
-        {player.gameId}
+        game: {player.gameId}
         {#if player.role}
             {player.role}
         {/if}
@@ -91,7 +94,7 @@
         {/each}
         <button on:click={startGame}>Start Game</button>
     </div>
-{:else if $gameStore.gameState == "playing"}
+{:else if $gameStore.gameState == "playing" || $gameStore.gameState == "clicked"}
     <div class="playing">
         <div class="sidenav">
             <p>Round: {$gameStore.round}/4</p>
@@ -156,7 +159,8 @@
                                     class="{$gameStore.currentPlayer ==
                                         $authUser.uid &&
                                     player.uid != $authUser.uid &&
-                                    card.turned != true
+                                    card.turned != true &&
+                                    $gameStore.gameState == 'playing'
                                         ? 'clickable'
                                         : ''} card"
                                     playerid={player.id}
@@ -164,7 +168,8 @@
                                     on:click={$gameStore.currentPlayer ==
                                         $authUser.uid &&
                                     player.uid != $authUser.uid &&
-                                    card.turned != true
+                                    card.turned != true &&
+                                    $gameStore.gameState == "playing"
                                         ? flipCard
                                         : ""}
                                     src="/computers/{card.turned == true

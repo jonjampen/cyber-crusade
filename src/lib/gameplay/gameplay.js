@@ -1,5 +1,6 @@
 import { firebaseDb } from "$lib/firebase.js"
-import { gameStore } from "$lib/stores/gameStore.ts"
+import { gameStore } from "$lib/stores/gameStore"
+import { playersStore } from "$lib/stores/playersStore"
 import {
     getDoc,
     updateDoc,
@@ -8,6 +9,9 @@ import {
 
 let game;
 gameStore.subscribe(val => game = val);
+
+let players;
+playersStore.subscribe(val => players = val);
 
 export async function flipCard(e) {
     let playerId = e.srcElement.attributes.playerid.value;
@@ -35,11 +39,25 @@ export async function flipCard(e) {
     gameDb.cards[cardType] -= 1
     await updateDoc(gameRef, {
         cards: gameDb.cards,
-        currentPlayer: nextActiveUser.data().uid,
+        gameState: "clicked",
     })
 
-    // if (turnedCards == realNumberOfPlayers) {
-    //     alert("Round ended");
-    //     startNewRound()
-    // }
+    // check if round ended
+    let turnedCards = 0;
+    players.forEach(player => {
+        player.cards.forEach(card => {
+            if (card.turned) turnedCards++;
+        })
+    });
+
+    if (turnedCards == players.length) {
+        alert("Round ended");
+        startNewRound()
+    }
+    else {
+        await updateDoc(gameRef, {
+            gameState: "playing",
+            currentPlayer: nextActiveUser.data().uid,
+        })
+    }
 }

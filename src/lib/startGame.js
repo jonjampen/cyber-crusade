@@ -88,6 +88,7 @@ export async function startGame() {
         startCards: cardsByPlayers[numberOfPlayers.toString()],
         cards: cardsByPlayers[numberOfPlayers.toString()],
         startRoles: rolesByPlayers[numberOfPlayers.toString()],
+        currentPlayer: players[0].uid,
     });
 
     await distribute(numberOfPlayers);
