@@ -53,11 +53,11 @@ export async function flipCard(e) {
 
     // Check Game over
     if (game.cards.honeypot === 0) {
-        await gameOver("Agents")
+        await gameOver("Agent")
         return;
     }
     else if (game.cards.target === 0) {
-        await gameOver("Hackers")
+        await gameOver("Hacker")
         return;
     }
 
@@ -68,7 +68,7 @@ export async function flipCard(e) {
         })
         if (parseInt(game.round) === 4) {
             // game over
-            await gameOver("Agents")
+            await gameOver("Agent")
             return;
         }
         else {
@@ -139,9 +139,18 @@ function flatten(object) {
 }
 
 async function gameOver(winner) {
+    let winners = [];
+    players.forEach(player => {
+        if (player.role === winner.toLowerCase()) {
+            winners.push(player.uid);
+        }
+    })
+    console.log(winners)
+
     let gameRef = doc(firebaseDb, "games", game.id.toString())
     await updateDoc(gameRef, {
         gameState: "over",
         winner: winner,
+        winners: winners
     })
 }

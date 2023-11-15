@@ -206,7 +206,7 @@
         <div class="players">
             {#if $gameStore.gameState === "over" || $gameStore.gameState === "dnf"}
                 <div class="player">
-                    <p>Game over, {$gameStore.winner} won!</p>
+                    <p>Game over, {$gameStore.winner}s won!</p>
                     <button on:click={newGame}>Play Again!</button>
                     <button on:click={leaveGame}>Leave Game</button>
                 </div>
