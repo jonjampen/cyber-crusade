@@ -166,7 +166,7 @@
             <p>
                 {player.name}
                 {#if player.uid.toString() === $authUser.uid.toString()}
-                    <button on:click={leaveGame}>Leave</button>
+                    <button on:click={leaveGame} class="leave">X</button>
                 {/if}
             </p>
         {/each}

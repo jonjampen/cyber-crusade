@@ -78,13 +78,12 @@ export async function joinGame(gameId) {
 export async function startGame() {
     // start calc
 
-    let numberOfPlayers = 0; // TODO: players.length()
+    let numberOfPlayers = players.length
 
-    players.forEach((player) => {
-        if (player.gameId.toString() === game.id) {
-            numberOfPlayers++;
-        }
-    })
+    if (numberOfPlayers < 3) {
+        alert('You must be at least 3 players to play.');
+        return
+    }
 
     await updateDoc(doc(firebaseDb, "games", game.id), {
         gameState: "calculating",

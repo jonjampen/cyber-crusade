@@ -3,7 +3,7 @@
     --white: #ffffff;
     --gray: #D9DCE1;
     --primary: #ee9725;
-    --active: #f9c6c1;
+    --error: #f9c6c1;
     --primary-light: #f9e1c1;
 }
 
@@ -162,4 +162,18 @@ span {
 
 .activePlayer {
     background-color: var(--primary);
+}
+
+form.join {
+    display: flex;
+    justify-content: start;
+    flex-direction: row !important;
+    gap: 32px
+}
+
+button.leave {
+    background-color: var(--error);
+    height: 24px;
+    width: 24px;
+    padding: 0;
 }

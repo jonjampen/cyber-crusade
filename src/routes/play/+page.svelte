@@ -1,21 +1,6 @@
 <script>
     import { authUser } from "$lib/stores/authStore";
     import { createGame, joinGame } from "$lib/startGame";
-    import {
-        getFirestore,
-        addDoc,
-        collection,
-        onSnapshot,
-        getDocs,
-        where,
-        query,
-        updateDoc,
-        doc,
-        setDoc,
-        getDoc,
-        deleteDoc,
-    } from "firebase/firestore";
-    import { firebaseDb } from "$lib/firebase.js";
     import { gameStore } from "$lib/stores/gameStore";
 
     let gameId = "";
@@ -32,7 +17,7 @@
 {/if}
 
 <h3>Join a Game</h3>
-<form on:submit|preventDefault={() => joinGame(gameId.value)}>
+<form class="join" on:submit|preventDefault={() => joinGame(gameId.value)}>
     <label>
         Game Code
         <input
