@@ -1,18 +1,7 @@
 import { playersStore } from "$lib/stores/playersStore";
 import { authUser } from "$lib/stores/authStore";
 
-export function countOccurrences() {
-    let cards = [];
-    let players;
-    playersStore.subscribe(val => players = val);
-    let user;
-    authUser.subscribe(val => user = val);
-
-    players.forEach((player) => {
-        if (player.uid === user.uid) {
-            cards = player.cards;
-        }
-    });
+export function countOccurrences(cards) {
     let targetCount = 0;
     let firewallCount = 0;
     let honeypotCount = 0;

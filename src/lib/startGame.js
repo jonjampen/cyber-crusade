@@ -94,6 +94,7 @@ export async function startGame() {
     await distribute(numberOfPlayers);
     await updateDoc(doc(firebaseDb, "games", game.id), {
         gameState: "playing",
+        round: 1,
     });
     return
 

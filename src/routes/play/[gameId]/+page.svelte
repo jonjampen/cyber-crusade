@@ -64,6 +64,7 @@
     });
 
     console.log($gameStore);
+    console.log("players", $playersStore);
 </script>
 
 {$gameStore.gameState != "roundEnded"}
@@ -94,10 +95,13 @@
         {/each}
         <button on:click={startGame}>Start Game</button>
     </div>
-{:else if $gameStore.gameState == "playing" || $gameStore.gameState == "clicked"}
+{:else if $gameStore.gameState == "playing" || $gameStore.gameState == "clicked" || $gameStore.gameState == "roundEnded"}
     <div class="playing">
         <div class="sidenav">
             <p>Round: {$gameStore.round}/4</p>
+            {#if $gameStore.gameState === "roundEnded"}
+                <p>Round Ended</p>
+            {/if}
             <hr />
             <p>
                 Target: {$gameStore.startCards.target -
@@ -148,9 +152,11 @@
                                 {/if}
                             </h3>
                             {#if player.uid == $authUser.uid}
-                                Firewall: {countOccurrences().firewall} <br />
-                                Honeypot: {countOccurrences().honeypot} <br />
-                                Target: {countOccurrences().target}
+                                Firewall: {countOccurrences(player.cards)
+                                    .firewall} <br />
+                                Honeypot: {countOccurrences(player.cards)
+                                    .honeypot} <br />
+                                Target: {countOccurrences(player.cards).target}
                             {/if}
                         </div>
                         <div class="cards">
