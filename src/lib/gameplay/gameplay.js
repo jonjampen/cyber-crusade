@@ -139,18 +139,18 @@ function flatten(object) {
 }
 
 async function gameOver(winner) {
-    let winners = [];
+    let playerIds = [];
     players.forEach(player => {
         if (player.role === winner.toLowerCase()) {
-            winners.push(player.uid);
+            playerIds.push(player.uid);
         }
     })
-    console.log(winners)
 
     let gameRef = doc(firebaseDb, "games", game.id.toString())
     await updateDoc(gameRef, {
         gameState: "over",
         winner: winner,
-        winners: winners
+        players: players,
+        playerIds: playerIds,
     })
 }

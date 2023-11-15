@@ -52,7 +52,5 @@ The goal is to create an online card game for multiple players. It can be played
 ---
 
 
-- [x] new game invite alert constantly
 - [ ] multiple games
-- [ ] statistics
 - [ ] 
