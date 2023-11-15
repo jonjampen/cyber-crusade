@@ -21,6 +21,7 @@
 
     const playersColl = collection(firebaseDb, "players");
     let gameRef;
+    let currentAlert = false;
 
     onMount(async () => {
         // get current game
@@ -109,7 +110,7 @@
         });
     }
 
-    $: $playersStore.forEach(async (player) => {
+    async function askInvite(player) {
         if (
             player.uid.toString() === $authUser.uid.toString() &&
             player.gameInvite
@@ -135,6 +136,18 @@
                     }
                 );
             }
+            currentAlert = false;
+        }
+    }
+
+    $: $playersStore.forEach(async (player) => {
+        if (
+            player.uid.toString() === $authUser.uid.toString() &&
+            player.gameInvite &&
+            !currentAlert
+        ) {
+            currentAlert = true;
+            await askInvite(player);
         }
     });
 </script>
