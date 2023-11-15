@@ -1,6 +1,12 @@
 <script>
+    import { randomName } from "$lib/randomName";
     import { goto } from "$app/navigation";
-    import { createUserWithEmailAndPassword } from "firebase/auth";
+    import {
+        createUserWithEmailAndPassword,
+        signInAnonymously,
+        GoogleAuthProvider,
+        signInWithPopup,
+    } from "firebase/auth";
     import { firebaseAuth, firebaseDb } from "$lib/firebase";
     import { addDoc, collection } from "firebase/firestore";
 
@@ -12,12 +18,7 @@
     function signUpUser() {
         createUserWithEmailAndPassword(firebaseAuth, email, password)
             .then(async (userCredential) => {
-                let data = {
-                    uid: userCredential.user.uid,
-                    name: name,
-                };
-                await addDoc(collection(firebaseDb, "users"), data);
-                goto("/play");
+                await basicSignUp(userCredential);
             })
             .catch((error) => {
                 const errorCode = error.code;
@@ -25,6 +26,37 @@
 
                 success = false;
             });
+    }
+
+    async function signInGuest() {
+        if (
+            confirm(
+                "Signing in as a guest means that your game data will NOT be saved and you can not log back in in the future."
+            )
+        ) {
+            signInAnonymously(firebaseAuth)
+                .then(async (userCredential) => {
+                    await basicSignUp(userCredential);
+                })
+                .catch((error) => {
+                    const errorCode = error.code;
+                    const errorMessage = error.message;
+                    console.log(errorCode, errorMessage);
+                    success = false;
+                });
+        } else {
+            return;
+        }
+    }
+
+    async function basicSignUp(userCredential) {
+        name = name || randomName();
+        let data = {
+            uid: userCredential.user.uid,
+            name: name,
+        };
+        await addDoc(collection(firebaseDb, "users"), data);
+        goto("/play");
     }
 </script>
 
@@ -69,6 +101,11 @@
             </div>
             <div class="field">
                 <button type="submit" id="signupSubmit">Sign Up</button>
+                <p class="or"><span>or</span></p>
+                <button on:click={signInGuest} class="guest"
+                    >Sign In as a Guest</button
+                >
+                <!-- <button on:click={signInGoogle}>Sign In with Google</button> -->
             </div>
         </form>
         <p>Already have an account? <a href="/login">Log In</a></p>

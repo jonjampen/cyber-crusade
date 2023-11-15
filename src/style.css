@@ -2,6 +2,7 @@
     --background: #F9FAFB;
     --white: #ffffff;
     --gray: #D9DCE1;
+    --gray-text: #757679;
     --primary: #ee9725;
     --error: #f9c6c1;
     --primary-light: #f9e1c1;
@@ -176,4 +177,24 @@ button.leave {
     height: 24px;
     width: 24px;
     padding: 0;
+}
+
+button.guest {
+    background-color: var(--gray);
+}
+
+
+.or {
+    width: 100%;
+    text-align: center;
+    border-bottom: 1px solid var(--gray);
+    line-height: 0.1em;
+    margin: 10px 0 20px;
+}
+
+.or span {
+    font-size: 14px;
+    color: var(--gray-text);
+    background: var(--white);
+    padding: 0 10px;
 }
