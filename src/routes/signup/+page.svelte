@@ -1,7 +1,8 @@
 <script>
     import { goto } from "$app/navigation";
     import { createUserWithEmailAndPassword } from "firebase/auth";
-    import { firebaseAuth } from "$lib/firebase";
+    import { firebaseAuth, firebaseDb } from "$lib/firebase";
+    import { addDoc, collection } from "firebase/firestore";
 
     let email,
         password,
@@ -10,13 +11,17 @@
 
     function signUpUser() {
         createUserWithEmailAndPassword(firebaseAuth, email, password)
-            .then(() => {
+            .then(async (userCredential) => {
+                let data = {
+                    uid: userCredential.user.uid,
+                    name: name,
+                };
+                await addDoc(collection(firebaseDb, "users"), data);
                 goto("/play");
             })
             .catch((error) => {
                 const errorCode = error.code;
                 const errorMessage = error.message;
-                console.log(errorCode, errorMessage);
 
                 success = false;
             });
