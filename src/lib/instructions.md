@@ -39,8 +39,4 @@ If you find a bug or have a feature request, please create an issue on my Github
 ## Project
 This project was built by Jon Jampen as a project for school. It is built with SvelteKit and Firestore.
 
-<a href="https://github.com/jonjampen/cyber-crusade/" target="_blank">Project on Github</a>
-
-[Contact](mailto:jon.jampen@cryptography.ch)
-
-<a href="https://github.com/jonjampen/cyber-crusade/blob/main/TODO.md" target="_blank">Project Plan</a>
+<a href="https://github.com/jonjampen/cyber-crusade/" target="_blank">Project on Github</a> | Contact: <a href="mailto:hello@jonjampen.ch" target="_blank">hello@jonjampen.ch</a> | <a href="https://github.com/jonjampen/cyber-crusade/blob/main/TODO.md" target="_blank">Project Plan</a>
