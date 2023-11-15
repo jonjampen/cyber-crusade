@@ -32,7 +32,7 @@ async function setGameId() {
     }
 }
 
-export async function createGame() {
+export async function createGame(state = false) {
     // create game document
     let gameData = {
         gameState: "created",
@@ -42,6 +42,10 @@ export async function createGame() {
     console.log(gameId);
     setDoc(doc(firebaseDb, "games", gameId.toString()), gameData);
 
+    if (state === "continue") {
+        console.log("co")
+        return gameId;
+    }
     joinGame(gameId);
     return;
 }
@@ -51,10 +55,10 @@ export async function joinGame(gameId) {
 
     if (user.uid) {
         // cancel if already a player
-        if (game.id != "") {
-            alert("already in one game")
-            return
-        }
+        // if (game.id != "") {
+        //     alert("already in one game")
+        //     return
+        // }
 
         let data = {
             uid: user.uid,
