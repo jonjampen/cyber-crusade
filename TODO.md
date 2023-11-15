@@ -52,5 +52,7 @@ The goal is to create an online card game for multiple players. It can be played
 ---
 
 
-- [ ] leave waiting room
+- [ ] new game invite alert constantly
+- [ ] multiple games
+- [ ] statistics
 - [ ] 

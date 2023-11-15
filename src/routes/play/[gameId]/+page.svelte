@@ -69,7 +69,21 @@
     });
 
     // finish game early
-    async function endGame() {}
+    async function endGame() {
+        if (
+            confirm(
+                "If you leave this game, the others will not be able to continue playing!"
+            )
+        ) {
+            await updateDoc(
+                doc(firebaseDb, "games", $gameStore.id.toString()),
+                {
+                    gameState: "over",
+                }
+            );
+            leaveGame();
+        }
+    }
 
     // start new game & invite current players
     async function newGame() {
@@ -100,6 +114,7 @@
             player.uid.toString() === $authUser.uid.toString() &&
             player.gameInvite
         ) {
+            console.log("inv", player.gameInvite);
             if (
                 confirm(
                     "Do you want to join the new game with id: " +
@@ -172,7 +187,7 @@
                 Agent 🕵️: {$gameStore.startRoles.agent}
             </p>
             <hr />
-            <button on:click={endGame}>End Game</button>
+            <button on:click={endGame}>Leave Game</button>
         </div>
 
         <div class="players">
