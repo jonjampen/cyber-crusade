@@ -50,12 +50,31 @@ export async function flipCard(e) {
             if (card.turned) turnedCards++;
         })
     });
+
+    // Check Game over
+    if (game.cards.honeypot === 0) {
+        await gameOver("Agents")
+        return;
+    }
+    else if (game.cards.target === 0) {
+        await gameOver("Hackers")
+        return;
+    }
+
+    // check round end and game end
     if (turnedCards == players.length) {
         await updateDoc(gameRef, {
             gameState: "roundEnded",
         })
-        alert("Round ended");
-        await startNewRound(nextActiveUser.data().uid)
+        if (parseInt(game.round) === 4) {
+            // game over
+            await gameOver("Agents")
+            return;
+        }
+        else {
+            alert("Round ended");
+            await startNewRound(nextActiveUser.data().uid)
+        }
     }
     else {
         await updateDoc(gameRef, {
@@ -117,4 +136,12 @@ function flatten(object) {
         }
     });
     return array
+}
+
+async function gameOver(winner) {
+    let gameRef = doc(firebaseDb, "games", game.id.toString())
+    await updateDoc(gameRef, {
+        gameState: "over",
+        winner: winner,
+    })
 }

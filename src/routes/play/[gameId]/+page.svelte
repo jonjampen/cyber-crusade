@@ -62,24 +62,8 @@
             unsubscribePlayers();
         };
     });
-
-    console.log($gameStore);
-    console.log("players", $playersStore);
 </script>
 
-{$gameStore.gameState != "roundEnded"}
-{$gameStore.gameState}
-{$gameStore.currentPlayer}
-{#each $playersStore as player}
-    <p>
-        {player.name}
-        {player.id}
-        game: {player.gameId}
-        {#if player.role}
-            {player.role}
-        {/if}
-    </p>
-{/each}
 {#if $gameStore.gameState == "created"}
     <div class="waiting">
         <h1>Waiting Room</h1>
@@ -95,7 +79,7 @@
         {/each}
         <button on:click={startGame}>Start Game</button>
     </div>
-{:else if $gameStore.gameState == "playing" || $gameStore.gameState == "clicked" || $gameStore.gameState == "roundEnded"}
+{:else if $gameStore.gameState == "playing" || $gameStore.gameState == "clicked" || $gameStore.gameState == "roundEnded" || $gameStore.gameState == "over"}
     <div class="playing">
         <div class="sidenav">
             <p>Round: {$gameStore.round}/4</p>
@@ -127,6 +111,9 @@
         </div>
 
         <div class="players">
+            {#if $gameStore.gameState === "over"}
+                <p>Game over, {$gameStore.winner} won!</p>
+            {/if}
             {#each $playersStore as player}
                 {#if player.gameId.toString() === $gameStore.id}
                     <div
