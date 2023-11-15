@@ -101,10 +101,10 @@
             </div>
             <div class="field">
                 <button type="submit" id="signupSubmit">Sign Up</button>
-                <p class="or"><span>or</span></p>
-                <button on:click={signInGuest} class="guest"
+                <!-- <p class="or"><span>or</span></p> -->
+                <!-- <button on:click={signInGuest} class="guest"
                     >Sign In as a Guest</button
-                >
+                > -->
                 <!-- <button on:click={signInGoogle}>Sign In with Google</button> -->
             </div>
         </form>
