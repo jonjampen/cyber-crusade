@@ -76,7 +76,7 @@
                     name="name"
                     id="signUpNameInput"
                     bind:value={name}
-                    placeholder="John Doe"
+                    placeholder="Leave empty for cool nick name ;-)"
                 />
             </div>
             <div class="field">

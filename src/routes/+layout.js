@@ -16,7 +16,7 @@ export async function load({ url }) {
                     name = a.data().name
                 })
 
-                name = name || randomName()
+                name = name || ""
 
                 authUser.set({
                     uid: user.uid,
