@@ -39,7 +39,7 @@ There are three possible outcomes:
 If you find a bug or have a feature request, please create an issue on my Github repository: <a href="https://github.com/jonjampen/cyber-crusade/issues" target="_blank">Submit an issue</a>
 
 ## Project
-This project was built by Jon Jampen as a project for school. It is built with SvelteKit and Firestore.
+This project was built by <a href="https://jonjampen.ch">Jon Jampen</a> as a project for school. It is built with SvelteKit and Firestore.
 [Project on Github](https://github.com/jonjampen/cyber-crusade/)
 [Contact](mailto:jon.jampen@cryptography.ch)
 [Project Plan](/TODO.md)
