@@ -95,9 +95,17 @@ export async function startGame() {
     });
 
     await distribute(numberOfPlayers);
+
+    let playerIds = [];
+    players.forEach(player => {
+        playerIds.push(player.uid);
+    })
+
     await updateDoc(doc(firebaseDb, "games", game.id), {
         gameState: "playing",
         round: 1,
+        players: players,
+        playerIds: playerIds,
     });
     return
 }
