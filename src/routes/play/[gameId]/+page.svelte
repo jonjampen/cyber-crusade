@@ -226,10 +226,10 @@
 
                                 {#if player.uid == $authUser.uid || $gameStore.gameState == "over"}
                                     <span
-                                        title={player.role == "Agent"
+                                        title={player.role == "agent"
                                             ? "Agent: try to direct hackers to honeypots."
                                             : "Hacker: try to find targets."}
-                                        >{player.role == "Agent"
+                                        >{player.role == "agent"
                                             ? "🕵️"
                                             : "👨‍💻"}</span
                                     >

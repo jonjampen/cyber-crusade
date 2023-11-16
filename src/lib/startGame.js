@@ -100,40 +100,6 @@ export async function startGame() {
         round: 1,
     });
     return
-
-    // distribute roles
-
-    players.forEach(async player => {
-        if (player.gameId === userData.game.id) {
-            let playerRole = distributeRoles();
-            let playerCards = distributeCards(5);
-
-            // add role & cards to db
-            await updateDoc(doc(db, "players", player.id), {
-                role: playerRole,
-                cards: playerCards,
-            });
-        }
-    });
-
-    // set gameState in db to playing
-    await setDoc(gameRef, {
-        gameState: "playing",
-        round: 1,
-        startCards: {
-            firewall: cardsByPlayers[numberOfPlayers.toString()].firewall,
-            target: cardsByPlayers[numberOfPlayers.toString()].target,
-            honeypot: cardsByPlayers[numberOfPlayers.toString()].honeypot,
-        },
-        cards: {
-            firewall: cardsByPlayers[numberOfPlayers.toString()].firewall,
-            target: cardsByPlayers[numberOfPlayers.toString()].target,
-            honeypot: cardsByPlayers[numberOfPlayers.toString()].honeypot,
-        },
-        currentPlayer: userData.uid,
-    })
-
-    playState = "playing";
 }
 
 function shuffle(array) {
@@ -154,7 +120,6 @@ function flatten(object) {
     return array
 }
 
-
 async function distribute(nop) {
     let roles = flatten(rolesByPlayers[nop.toString()]);
     roles = shuffle(roles);
@@ -163,7 +128,7 @@ async function distribute(nop) {
     cards = shuffle(cards);
 
     // distribute
-    await players.forEach(async (player) => {
+    for (const player of players) {
         if (player.gameId.toString() === game.id) {
             let playerCards = [];
 
@@ -171,7 +136,7 @@ async function distribute(nop) {
                 playerCards.push({
                     value: cards[0],
                     turned: false,
-                })
+                });
                 cards.shift();
             }
 
@@ -179,7 +144,8 @@ async function distribute(nop) {
                 role: roles[0],
                 cards: playerCards,
             });
+
             roles.shift();
         }
-    })
+    }
 }

@@ -1,14 +1,4 @@
 export let cardsByPlayers = {
-    "1": {
-        "firewall": 8,
-        "target": 5,
-        "honeypot": 2,
-    },
-    "2": {
-        "firewall": 8,
-        "target": 5,
-        "honeypot": 2,
-    },
     "3": {
         "firewall": 8,
         "target": 5,

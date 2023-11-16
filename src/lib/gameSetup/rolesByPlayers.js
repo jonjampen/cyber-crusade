@@ -1,12 +1,4 @@
 export let rolesByPlayers = {
-    "1": {
-        "hacker": 2,
-        "agent": 2,
-    },
-    "2": {
-        "hacker": 2,
-        "agent": 2,
-    },
     "3": {
         "hacker": 2,
         "agent": 2,
